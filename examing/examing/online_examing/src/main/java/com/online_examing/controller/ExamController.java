@@ -42,6 +42,17 @@ public class ExamController {
         return restDoing.go(null, logger);
     }
 
+    /**
+     * 用户更新信息
+     */
+    @PostMapping(Routes.USER_UPDATEINFO)
+    public RestResult updateInfo(@RequestBody User user){
+        RestDoing restDoing = restResult ->{
+            restResult.data = userService.updateInfo(user);
+        };
+        return restDoing.go(null, logger);
+    }
+
 
 
 }

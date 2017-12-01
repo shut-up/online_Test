@@ -48,13 +48,18 @@
                   userLogin(userParas).then((res) => {
                       this.loading = false;
                       //console.log("res"+res.data.name);
-                      if (res.data.name !== undefined) {
+                      if (res.data.id !== undefined) {
                           sessionStorage.setItem('name', res.data.name);   //将name存到sessionStorage
+                          sessionStorage.setItem('id', res.data.id);   //将name存到sessionStorage
                           sessionStorage.setItem('type', res.data.type);   //将type存到sessionStorage
+                          this.$message({
+                              message: '登录成功',
+                              type: 'success'
+                          });
                           if(res.data.type == 0) {  //学生登录跳转到学生页面
-                              this.$router.push({path: '/student'});
+                              this.$router.push({path: '/myExam'});
                           }else {                 //教师登录跳转到教师页面
-                              this.$router.push({path: '/teacher'});
+                              this.$router.push({path: '/assignExam'});
                           }
                       } else{
                           alert("用户名或密码错误！")

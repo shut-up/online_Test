@@ -31,10 +31,10 @@ router.beforeEach((to, from, next) => {
         next({ path: '/login' })
     } else if(type == 0 && to.path == '/teacher'){
         alert("当前为学生账户，无权访问！")
-        next({ path: '/student' })
+        next({ path: '/myExam' })
     } else if(type == 1 && to.path == '/student'){
         alert("当前为教师账户，无权访问！")
-        next({ path: '/teacher' })
+        next({ path: '/assignExam' })
     } else {
         next()
     }

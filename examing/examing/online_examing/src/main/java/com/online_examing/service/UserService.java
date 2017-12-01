@@ -33,13 +33,24 @@ public class UserService {
     *@Description: 用户注册
     *@Date: 2017/11/28
     */
-    public String register(User user){
+    public Long register(User user){
         User existUser = userRepository.findById(user.getId());
         if(existUser != null){
             return null;
         }
         userRepository.save(user);
-        return user.getName();
+        return user.getId();
     }
 
+    /**
+    *@Description: 更新用户信息
+    *@Date: 2017/12/1
+    */
+    public User updateInfo(User user){
+        User existUser = userRepository.findById(user.getId());
+        user.setName(existUser.getName());
+        user.setType(existUser.getType());
+        user =  userRepository.save(user);
+        return user;
+    }
 }

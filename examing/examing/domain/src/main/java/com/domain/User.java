@@ -14,6 +14,8 @@ public class User {
     private String name;
     private String password;
     private Integer type;   //0学生、1教师
+    private String grade;
+    private String school;
 
     public String getName() {
         return name;
@@ -45,5 +47,21 @@ public class User {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
     }
 }

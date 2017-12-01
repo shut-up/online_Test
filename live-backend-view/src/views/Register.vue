@@ -51,7 +51,7 @@
             { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' }
           ],
           type: [
-              { required: true, message: '请至少选择一个身份', trigger: 'change' }
+              { required: true, message: '请选择身份', trigger: 'change' }
           ],
         },
         checked: true
@@ -67,14 +67,22 @@
                 if (valid) {
                     //获取表单参数
                     let userParas = Object.assign({}, this.userForm);
-                    console.log(userParas.id + "aaa" + userParas.type);
+                    //console.log(userParas.id + "aaa" + userParas.type);
                     this.loading = true;
                     userRegister(userParas).then((res) => {
                         this.loading = false;
+                        console.log(res.data);
                         if (res.data !== undefined) {
+                            this.$message({
+                                message: '注册成功',
+                                type: 'success'
+                            });
                             this.$router.push({path: '/login'});  //login.vue页面
                         }else {
-                            alert("用户已存在！");
+                            this.$message({
+                                message: '用户已存在',
+                                type: 'error'
+                            });
                             return false;
                         }
                     })
