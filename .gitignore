@@ -5,3 +5,9 @@
 /live-backend-view/.idea/
 /examing/examing/.idea/
 /examing/examing/examing.iml
+/examing/examing/domain/target/
+/examing/examing/domain/domain.iml
+/examing/examing/utils/target/
+/examing/examing/utils/utils.iml
+/examing/examing/online_examing/target/
+/examing/examing/online_examing/online_examing.iml
