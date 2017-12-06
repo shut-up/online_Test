@@ -1,7 +1,11 @@
 package com.online_examing.controller;
 
+import com.domain.PaperDetail;
 import com.domain.User;
 import com.online_examing.Routes;
+import com.online_examing.domain.PaperRequestDto;
+import com.online_examing.repository.PaperRepository;
+import com.online_examing.service.PaperService;
 import com.online_examing.service.UserService;
 import com.utils.RestCode;
 import com.utils.RestDoing;
@@ -18,7 +22,13 @@ public class ExamController {
     private final static Logger logger = LoggerFactory.getLogger(ExamController.class);
 
     @Autowired
-    public UserService userService;
+    private UserService userService;
+
+    @Autowired
+    private PaperService paperService;
+
+    @Autowired
+    private PaperRepository paperRepository;
 
     /**
      * 用户登录
@@ -53,6 +63,49 @@ public class ExamController {
         return restDoing.go(null, logger);
     }
 
+    /**
+     * 添加题目
+     */
+    @PostMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_ADDQUESTION)
+    public RestResult addQuestion(@RequestBody PaperDetail paperDetail){
+        RestDoing restDoing = restResult ->{
+            restResult.data = paperService.addQuestion(paperDetail);
+        };
+        return restDoing.go(null, logger);
+    }
+
+    /**
+     * 获取题目的分页列表
+     */
+    @GetMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_GETQUESTIONDLIST)
+    public RestResult getQuestionList(PaperRequestDto paperRequestDto){
+        RestDoing restDoing = restResult ->{
+            restResult.data = paperService.getPaperList(paperRequestDto);
+        };
+        return restDoing.go(null, logger);
+    }
+
+    /**
+     * 获取题目的总数目
+     */
+    @GetMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_GETQUESTIONDSIZE)
+    public RestResult getQuestionSize(){
+        RestDoing restDoing = restResult ->{
+            restResult.data = paperService.getPaperSize();
+        };
+        return restDoing.go(null, logger);
+    }
+
+    /**
+     * 查找题目
+     */
+    @GetMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_SEARCHQUESTION)
+    public RestResult searchQuestion(PaperRequestDto paperRequestDto){
+        RestDoing restDoing = restResult ->{
+            restResult.data = paperService.searchQuestion(paperRequestDto);
+        };
+        return restDoing.go(null, logger);
+    }
 
 
 }

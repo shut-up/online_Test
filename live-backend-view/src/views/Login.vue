@@ -2,7 +2,7 @@
   <el-form :model="userForm" :rules="rules" ref="userForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3 class="title">系统登录</h3>
     <el-form-item prop="id">
-      <el-input type="text" v-model="userForm.id" auto-complete="off" placeholder="账号"></el-input>
+      <el-input type="text" v-model="userForm.accountNumber" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input type="password" v-model="userForm.password" auto-complete="off" placeholder="密码"></el-input>
@@ -24,11 +24,11 @@
       return {
         loading: false,
         userForm: {
-          id: '',
+          accountNumber: '',
           password: ''
         },
         rules: {
-          id: [
+            accountNumber: [
             { required: true, message: '请输入账号', trigger: 'blur' },
           ],
             password: [
@@ -48,9 +48,9 @@
                   userLogin(userParas).then((res) => {
                       this.loading = false;
                       //console.log("res"+res.data.name);
-                      if (res.data.id !== undefined) {
+                      if (res.data !== undefined) {
                           sessionStorage.setItem('name', res.data.name);   //将name存到sessionStorage
-                          sessionStorage.setItem('id', res.data.id);   //将name存到sessionStorage
+                          sessionStorage.setItem('accountNumber', res.data.accountNumber);   //将name存到sessionStorage
                           sessionStorage.setItem('type', res.data.type);   //将type存到sessionStorage
                           this.$message({
                               message: '登录成功',
@@ -59,11 +59,13 @@
                           if(res.data.type == 0) {  //学生登录跳转到学生页面
                               this.$router.push({path: '/myExam'});
                           }else {                 //教师登录跳转到教师页面
-                              this.$router.push({path: '/assignExam'});
+                              this.$router.push({path: '/choiceQuestion'});
                           }
                       } else{
-                          alert("用户名或密码错误！")
-                          return false;
+                          this.$message({
+                              message: '用户名或密码错误',
+                              type: 'error'
+                          });
                       }
                   })
               }else {  //没通过表单验证（没输入账号，密码等）

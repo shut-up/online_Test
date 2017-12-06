@@ -2,7 +2,7 @@
   <el-form :model="userForm" :rules="rules" ref="userForm" label-width="100px" class="demo-ruleForm login-container">
     <h3 class="title">用户注册</h3>
     <el-form-item label="账号：" prop="id">
-      <el-input type="text" v-model="userForm.id" auto-complete="off" placeholder="2-10个字符"></el-input>
+      <el-input type="text" v-model="userForm.accountNumber" auto-complete="off" placeholder="2-10个字符"></el-input>
     </el-form-item>
     <el-form-item label="姓名：" prop="name">
       <el-input type="text" v-model="userForm.name" auto-complete="off" placeholder="2-8个字符"></el-input>
@@ -32,13 +32,13 @@
       return {
         loading: false,
         userForm: {
-          id: '',
+          accountNumber: '',
           password: '',
           type: '',
           name: ''
         },
         rules: {
-          id: [
+          accountNumber: [
             { required: true, message: '请输入账号', trigger: 'blur' },
             { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
           ],

@@ -5,7 +5,7 @@
         <el-col>
             <el-form ref="studentInfo"  :rules="studentInfoRules" :model="studentInfo"  label-width="100px" class="demo-ruleForm">
                 <el-form-item label="学号：" >
-                    <el-tag type="info">{{id}}</el-tag>
+                    <el-tag type="info">{{accountNumber}}</el-tag>
                 </el-form-item>
                 <el-form-item label="姓名：" >
                     <el-tag type="info">{{name}}</el-tag>
@@ -67,7 +67,7 @@
             };
             return {
                 studentInfo: {
-                    id: '',
+                    accountNumber: '',
                     name: '',
                     password: '',
                     newPassword: '',
@@ -75,7 +75,7 @@
                     school: '',
                     grade: '',
                 },
-                id: sessionStorage.getItem('id'),
+                accountNumber: sessionStorage.getItem('accountNumber'),
                 name: sessionStorage.getItem('name'),
                 password: '',
                 newPassword: '',
@@ -126,7 +126,7 @@
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             let para = {
-                                id: this.id,
+                                accountNumber: this.accountNumber,
                                 password: this.studentInfo.newPassword,
                                 grade: this.studentInfo.grade,
                                 school: this.studentInfo.school,

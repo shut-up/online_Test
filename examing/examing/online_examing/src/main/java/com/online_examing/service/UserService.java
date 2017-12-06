@@ -2,6 +2,8 @@ package com.online_examing.service;
 
 import com.domain.User;
 import com.online_examing.repository.UserRepository;
+import com.utils.DefaultKeyGenerator;
+import com.utils.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private DefaultKeyGenerator defaultKeyGenerator ;
+
     /**
     *@Description: 登录成功返回用户名，失败返回空
     *@Date: 2017/11/28
     */
     public User login(User user){
-        User existUser = userRepository.findByIdAndPassword(user.getId(), user.getPassword());
+        User existUser = userRepository.findByAccountNumberAndPassword(user.getAccountNumber(), user.getPassword());
         if(existUser == null){
             return null;
         }
@@ -34,10 +39,11 @@ public class UserService {
     *@Date: 2017/11/28
     */
     public Long register(User user){
-        User existUser = userRepository.findById(user.getId());
+        User existUser = userRepository.findByAccountNumber(user.getAccountNumber());
         if(existUser != null){
             return null;
         }
+        user.setId((Long) defaultKeyGenerator.generateKey());
         userRepository.save(user);
         return user.getId();
     }
@@ -47,10 +53,11 @@ public class UserService {
     *@Date: 2017/12/1
     */
     public User updateInfo(User user){
-        User existUser = userRepository.findById(user.getId());
-        user.setName(existUser.getName());
-        user.setType(existUser.getType());
-        user =  userRepository.save(user);
+        User existUser = userRepository.findByAccountNumber(user.getAccountNumber());
+        existUser.setPassword(user.getPassword());
+        existUser.setGrade(user.getGrade());
+        existUser.setSchool(user.getSchool());
+        user =  userRepository.save(existUser);
         return user;
     }
 }

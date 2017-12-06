@@ -8,6 +8,8 @@ import routes from './routes'
 import 'element-ui/lib/theme-default/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import './styles/style.less'
+import $ from './common/js/jquery-vendor';
+import _ from './common/js/lodash-vendor';
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)

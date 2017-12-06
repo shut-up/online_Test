@@ -19,4 +19,13 @@ public interface Routes {
     String USER_LOGIN = "/login";
     String USER_REGISTER = "/register";
     String USER_UPDATEINFO = "/updateInfo";
+
+    /**
+     * Paper
+     */
+    String PAPER_BASE_ROUTE = "/paper";
+    String PAPER_ADDQUESTION = "/addQuestion";
+    String PAPER_GETQUESTIONDSIZE = "/getQuestionSize";
+    String PAPER_GETQUESTIONDLIST = "/getQuestionList";
+    String PAPER_SEARCHQUESTION = "/searchQuestion";
 }

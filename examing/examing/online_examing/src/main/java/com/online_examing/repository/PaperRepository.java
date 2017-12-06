@@ -1,8 +1,10 @@
 package com.online_examing.repository;
 
-import com.domain.User;
+import com.domain.PaperDetail;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Author: walton
@@ -11,11 +13,9 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface UserRepository extends MongoRepository<User,Long> {
+public interface PaperRepository extends MongoRepository<PaperDetail,Long> {
 
-    public User findById(Long id);
+    public List<PaperDetail> findByTitleAndType(String title, int type);
 
-    public User findByAccountNumber(Long accountNumber);
 
-    public User findByAccountNumberAndPassword(Long accountNumber, String password);
 }

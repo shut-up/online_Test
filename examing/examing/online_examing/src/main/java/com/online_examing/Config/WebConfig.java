@@ -1,4 +1,4 @@
-package com.online_examing.util;
+package com.online_examing.Config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -19,9 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
- * 解决跨域请求问题
- * Created by dengwenzhong on 17/8/18.
- */
+*@Description: 解决跨域请求
+*@Date: 2017/12/4
+*/
 @Configuration
 @EnableWebMvc
 @EnableAsync

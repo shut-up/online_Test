@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.Random;
 /**
  * Created by dengwenzhong on 17/8/2.
  */
+@Configuration
 public final class DefaultKeyGenerator implements KeyGenerator {
     private Logger log = LoggerFactory.getLogger(DefaultKeyGenerator.class);
 

@@ -9,8 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="User")
-public class User {
-    private Long id;
+public class User extends BaseEntity{
+    private Long accountNumber;
     private String name;
     private String password;
     private Integer type;   //0学生、1教师
@@ -25,12 +25,12 @@ public class User {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAccountNumber(Long accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public String getPassword() {

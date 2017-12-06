@@ -14,6 +14,19 @@ export const updateInfo = params => {
     return axios.post(`${commentBase}user/updateInfo`, params).then(res=>res.data);
 };
 
+/******* paper *******/
+export const addQuestion = params => {
+    return axios.post(`${commentBase}user/paper/addQuestion`, params).then(res=>res.data);
+};
+export const getQuestionSize = params => {
+    return axios.get(`${commentBase}user/paper/getQuestionSize`).then(res=>res.data);
+};
+export const getQuestionList = params => {
+    return axios.get(`${commentBase}user/paper/getQuestionList`, {params:params} ).then(res=>res.data);
+};
+export const searchQuestion = params => {
+    return axios.get(`${commentBase}user/paper/searchQuestion`, {params:params} ).then(res=>res.data);
+};
 
 /******* room *******/
 //addRoom

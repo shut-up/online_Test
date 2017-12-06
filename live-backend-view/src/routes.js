@@ -11,7 +11,9 @@ import myPractice from './views/student/myPractice.vue';
 import myMark from './views/student/myMark.vue';
 import editStudentInfo from './views/student/editStudentInfo.vue';
 
-import assignExam from './views/teacher/assignExam.vue';
+import choiceQuestion from './views/teacher/choiceQuestion.vue';
+import blankFillingQuestion from './views/teacher/blankFillingQuestion.vue';
+import trueFalseQuestion from './views/teacher/trueFalseQuestion.vue';
 import editTeacherInfo from './views/teacher/editTeacherInfo.vue';
 import commentManager from './views/comment/commentManager.vue';   //评论管理页面
 
@@ -91,11 +93,14 @@ let routes = [
     {
         path: '/teacher',
         component: teacherHome,
-        name: '布置考试',
+        name: '布置考试题目',
         iconCls: 'fa el-icon-edit',
         isTeacher: true,
         children: [
-            { path: '/assignExam', component: assignExam,  name: "布置考试"}
+            { path: '/choiceQuestion', component: choiceQuestion,  name: "选择题"},
+            { path: '/trueFalseQuestion', component: trueFalseQuestion,  name: "判断题"},
+            { path: '/blankFillingQuestion', component: blankFillingQuestion,  name: "填空题"},
+            { path: '/assignExam', component: blankFillingQuestion,  name: "主观题", hidden: true},
         ]
     },
     {
