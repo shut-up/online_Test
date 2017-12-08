@@ -35,11 +35,29 @@ public class PaperService {
      *@Date: 2017/11/28
      */
     public PaperDetail addQuestion(PaperDetail paperDetail){
-        paperDetail.setId((Long) defaultKeyGenerator.generateKey());
-        long now = System.currentTimeMillis();
-        paperDetail.setCreateTime(now);
+        if(paperDetail.getId()==0)
+            paperDetail.setId((Long) defaultKeyGenerator.generateKey());
+        if(paperDetail.getCreateTime()==0) {
+            long now = System.currentTimeMillis();
+            paperDetail.setCreateTime(now);
+        }
         return paperRepository.save(paperDetail);
     }
+
+    /**
+     *@Description: 删除题目
+     *@Date: 2017/11/28
+     */
+    public PaperDetail deleteQuestion(Long id){
+        PaperDetail paperDetail = paperRepository.findOne(id);
+        if(paperDetail!=null){
+            paperRepository.delete(id);
+            return paperDetail;
+        }else {
+            return null;
+        }
+    }
+
 
     /**
     *@Description: 获取当前页数的题目

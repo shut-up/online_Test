@@ -1,5 +1,6 @@
 package com.domain;
 
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @Createtime: 2017/11/28
  */
 
-@Document(collection="ExamDetail")
+@Document(collection="PaperDetail")
 public class PaperDetail extends BaseEntity{
     private String title;
     private List<String> answer;
@@ -21,6 +22,15 @@ public class PaperDetail extends BaseEntity{
     private String selectionD;
     private Integer type;//0选择题，1判断题，2填空题
     private long createTime;//创建时间
+    private Integer status; //0隐藏，
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getTitle() {
         return title;

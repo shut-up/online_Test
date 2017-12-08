@@ -28,4 +28,6 @@ public interface Routes {
     String PAPER_GETQUESTIONDSIZE = "/getQuestionSize";
     String PAPER_GETQUESTIONDLIST = "/getQuestionList";
     String PAPER_SEARCHQUESTION = "/searchQuestion";
+    String PAPER_UPDATEQUESTION = "/updateQuestion";
+    String PAPER_DELETEQUESTION = "/deleteQuestion";
 }

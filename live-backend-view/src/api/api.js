@@ -27,6 +27,12 @@ export const getQuestionList = params => {
 export const searchQuestion = params => {
     return axios.get(`${commentBase}user/paper/searchQuestion`, {params:params} ).then(res=>res.data);
 };
+export const updateQuestion = params => {
+    return axios.post(`${commentBase}user/paper/updateQuestion`, params).then(res=>res.data);
+};
+export const deleteQuestion = params => {
+    return axios.post(`${commentBase}user/paper/deleteQuestion`, params).then(res=>res.data);
+};
 
 /******* room *******/
 //addRoom

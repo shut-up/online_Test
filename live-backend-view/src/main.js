@@ -10,11 +10,11 @@ import 'font-awesome/css/font-awesome.min.css'
 import './styles/style.less'
 import $ from './common/js/jquery-vendor';
 import _ from './common/js/lodash-vendor';
+import global_ from './config/base.vue';
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
-import global_ from './config/base.vue';
 
 Vue.prototype.GLOBAL = global_;
 

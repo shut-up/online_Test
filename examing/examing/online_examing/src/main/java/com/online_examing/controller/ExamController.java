@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(Routes.USER_BASE_ROUTE)
 public class ExamController {
@@ -64,12 +66,23 @@ public class ExamController {
     }
 
     /**
-     * 添加题目
+     * 添加、更新题目
      */
     @PostMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_ADDQUESTION)
     public RestResult addQuestion(@RequestBody PaperDetail paperDetail){
         RestDoing restDoing = restResult ->{
             restResult.data = paperService.addQuestion(paperDetail);
+        };
+        return restDoing.go(null, logger);
+    }
+
+    /**
+     * 删除题目
+     */
+    @PostMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_DELETEQUESTION)
+    public RestResult deleteQuestion(@RequestParam(value="id") Long  id){
+        RestDoing restDoing = restResult ->{
+            restResult.data = paperService.deleteQuestion(id);
         };
         return restDoing.go(null, logger);
     }
@@ -103,6 +116,31 @@ public class ExamController {
     public RestResult searchQuestion(PaperRequestDto paperRequestDto){
         RestDoing restDoing = restResult ->{
             restResult.data = paperService.searchQuestion(paperRequestDto);
+        };
+        return restDoing.go(null, logger);
+    }
+
+    /**
+    *@Description: 更新信息
+    *@Date: 2017/12/8
+    */
+    @PostMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_UPDATEQUESTION)
+    public RestResult updateQuestion(@RequestBody PaperRequestDto paperRequestDto){
+        RestDoing restDoing = restResult ->{
+            String[] id = paperRequestDto.getIds().split(",");
+            Integer status = paperRequestDto.getStatus();
+            if(status==2){
+                for (String i : id) {
+                    paperRepository.delete(Long.valueOf(i));
+                }
+            }else {
+                PaperDetail paperDetail = new PaperDetail();
+                for (String i : id) {
+                    paperDetail = paperRepository.findOne(Long.valueOf(i));
+                    paperDetail.setStatus(status);
+                    restResult.data = paperRepository.save(paperDetail);
+                }
+            }
         };
         return restDoing.go(null, logger);
     }

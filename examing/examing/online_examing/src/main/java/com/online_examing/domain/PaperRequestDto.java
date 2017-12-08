@@ -11,6 +11,24 @@ public class PaperRequestDto implements Serializable {
     private int pageSize;
     private String keywords;
     private int type;
+    private int status;
+    private String ids;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getIds() {
+        return ids;
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
 
     public String getKeywords() {
         return keywords;
