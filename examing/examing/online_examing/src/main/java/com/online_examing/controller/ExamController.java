@@ -102,9 +102,9 @@ public class ExamController {
      * 获取题目的总数目
      */
     @GetMapping(Routes.PAPER_BASE_ROUTE+'/'+Routes.PAPER_GETQUESTIONDSIZE)
-    public RestResult getQuestionSize(){
+    public RestResult getQuestionSize(@RequestParam(value = "type")Integer type){
         RestDoing restDoing = restResult ->{
-            restResult.data = paperService.getPaperSize();
+            restResult.data = paperService.getPaperSize(type);
         };
         return restDoing.go(null, logger);
     }

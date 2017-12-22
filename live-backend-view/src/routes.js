@@ -5,17 +5,18 @@ import studentHome from './views/studentHome.vue'
 import teacherHome from './views/teacherHome.vue'
 import anchor from './views/anchor/anchors.vue';
 import participants from './views/participant/participants.vue';
-
+//student
 import myExam from './views/student/myExam.vue';
 import myPractice from './views/student/myPractice.vue';
 import myMark from './views/student/myMark.vue';
 import editStudentInfo from './views/student/editStudentInfo.vue';
-
+//teacher
 import choiceQuestion from './views/teacher/choiceQuestion.vue';
 import blankFillingQuestion from './views/teacher/blankFillingQuestion.vue';
 import trueFalseQuestion from './views/teacher/trueFalseQuestion.vue';
-import editTeacherInfo from './views/teacher/editTeacherInfo.vue';
-import commentManager from './views/comment/commentManager.vue';   //评论管理页面
+import editTeacherPSW from './views/teacher/editTeacherPSW.vue';
+import improveTeacherInfo from './views/teacher/improveTeacherInfo.vue';
+import assignPaper from './views/teacher/assignPaper.vue';
 
 let routes = [
     //映射登录
@@ -93,7 +94,7 @@ let routes = [
     {
         path: '/teacher',
         component: teacherHome,
-        name: '布置考试题目',
+        name: '布置题目',
         iconCls: 'fa el-icon-edit',
         isTeacher: true,
         children: [
@@ -106,31 +107,22 @@ let routes = [
     {
         path: '/teacher',
         component: teacherHome,
-        name: '修改信息',
-        iconCls: 'fa fa-address-card',
-        isTeacher: true,
-        children: [
-            { path: '/editTeacherInfo', component: editTeacherInfo,  name: "信息管理"}
-        ]
-    },
-    {
-        path: '/teacher',
-        component: teacherHome,
-        name: '参赛管理',
+        name: '考试管理',
         iconCls: 'fa fa-user-o',
         isTeacher: true,
         children: [
-            { path: '/participants', component: participants,  name: "参赛管理"}
+            { path: '/assignPaper', component: assignPaper,  name: "生成试卷"}
         ]
     },
     {
         path: '/teacher',
         component: teacherHome,
-        name: '评论管理',
-        iconCls: 'fa fa-comment-o',
+        name: '信息管理',
+        iconCls: 'fa fa-address-card',
         isTeacher: true,
         children: [
-            { path: '/commentManager', component: commentManager,  name: "评论管理"}
+            { path: '/improveTeacherInfo', component: improveTeacherInfo,  name: "完善信息"},
+            { path: '/editTeacherPSW', component: editTeacherPSW,  name: "修改密码"}
         ]
     },
     {

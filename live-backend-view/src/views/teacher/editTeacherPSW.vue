@@ -3,7 +3,7 @@
 
         <!--修改信息-->
         <el-col>
-            <el-form ref="studentInfo"  :rules="studentInfoRules" :model="studentInfo"  label-width="100px" class="demo-ruleForm">
+            <el-form ref="teacherInfo"  :rules="teacherInfoRules" :model="teacherInfo"  label-width="100px" class="demo-ruleForm">
                 <el-form-item label="学号：" >
                     <el-tag type="info">{{accountNumber}}</el-tag>
                 </el-form-item>
@@ -11,29 +11,14 @@
                     <el-tag type="info">{{name}}</el-tag>
                 </el-form-item>
                 <el-form-item prop="newPassword" label="新密码：">
-                    <el-input type="password" v-model="studentInfo.newPassword" auto-complete="off" placeholder="请输入新密码 (1-15个字符)"></el-input>
+                    <el-input type="password" v-model="teacherInfo.newPassword" auto-complete="off" placeholder="请输入新密码 (1-15个字符)"></el-input>
                 </el-form-item>
                 <el-form-item prop="checknewPassword" label="确认密码：">
-                    <el-input type="password" v-model="studentInfo.checknewPassword" auto-complete="off" placeholder="请再次输入新密码"></el-input>
-                </el-form-item>
-                <el-form-item label="年级：">
-                    <el-select clearable v-model="studentInfo.grade">
-                        <el-option label="2014" value="2014"></el-option>
-                        <el-option label="2015" value="2015"></el-option>
-                        <el-option label="2016" value="2016"></el-option>
-                        <el-option label="2017" value="2017"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="学院：">
-                    <el-select clearable v-model="studentInfo.school">
-                        <el-option label="信息学院" value="信息学院"></el-option>
-                        <el-option label="物理学院" value="物理学院"></el-option>
-                        <el-option label="外语学院" value="外语学院"></el-option>
-                    </el-select>
+                    <el-input type="password" v-model="teacherInfo.checknewPassword" auto-complete="off" placeholder="请再次输入新密码"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="updateInfo()">立即修改</el-button>
-                    <el-button @click="resetForm('studentInfo')">重置</el-button>
+                    <el-button @click="resetForm('teacherInfo')">重置</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -50,8 +35,8 @@
                 if (value === '') {
                     callback(new Error('请输入密码'));
                 } else {
-                    if (this.studentInfo.checknewPassword !== '') {
-                        this.$refs.studentInfo.validateField('checknewPassword');
+                    if (this.teacherInfo.checknewPassword !== '') {
+                        this.$refs.teacherInfo.validateField('checknewPassword');
                     }
                     callback();
                 }
@@ -59,30 +44,26 @@
             var validatePass2 = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请再次输入密码'));
-                } else if (value !== this.studentInfo.newPassword) {
+                } else if (value !== this.teacherInfo.newPassword) {
                     callback(new Error('两次输入密码不一致!'));
                 } else {
                     callback();
                 }
             };
             return {
-                studentInfo: {
+                teacherInfo: {
                     accountNumber: '',
                     name: '',
                     password: '',
                     newPassword: '',
                     checknewPassword: '',
-                    school: '',
-                    grade: '',
                 },
-                accountNumber: sessionStorage.getItem('accountNumber'),
-                name: sessionStorage.getItem('name'),
+                accountNumber: sessionStorage.getItem('accountNumber')==null?localStorage.getItem('accountNumber'):sessionStorage.getItem('accountNumber'),
+                name: sessionStorage.getItem('name')==null?localStorage.getItem('name'):sessionStorage.getItem('name'),
                 password: '',
                 newPassword: '',
                 checknewPassword: '',
-                school: '',
-                grade: '',
-                studentInfoRules: {
+                teacherInfoRules: {
                     newPassword: [
                         { required: true, message: '请输入新密码', trigger: 'blur' },
                         { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' },
@@ -92,12 +73,6 @@
                         { required: true, message: '请再次输入新密码', trigger: 'blur' },
                         { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' },
                         { validator: validatePass2, trigger: 'blur' }
-                    ],
-                    school: [
-                        { required: true, message: '请选择学院', trigger: 'change' }
-                    ],
-                    grade: [
-                        { required: true, message: '请选择年级', trigger: 'change' }
                     ],
                 }
             };
@@ -122,62 +97,40 @@
                 return false;
             },
             updateInfo: function () {
-                this.$refs.studentInfo.validate((valid) => {
+                this.$refs.teacherInfo.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             let para = {
                                 accountNumber: this.accountNumber,
-                                password: this.studentInfo.newPassword,
-                                grade: this.studentInfo.grade,
-                                school: this.studentInfo.school,
+                                password: this.teacherInfo.newPassword,
                             }
-                            //let para = Object.assign({}, this.studentInfo);
+                            //let para = Object.assign({}, this.teacherInfo);
                             updateInfo(para).then((res) => {
                                 if (res.data !== undefined) {
                                     this.$message({
                                         message: '更新成功',
                                         type: 'success'
                                     });
-                                    this.resetForm('studentInfo');
+                                    this.resetForm('teacherInfo');
                                 }else{
                                     this.$message({
                                         message: '更新失败',
                                         type: 'error'
                                     });
                                 }
-                                this.$router.push({path: '/editStudentInfo'});
+                                this.$router.push({path: '/editTeacherPSW'});
                             });
                         });
                     }
                 });
             },
-            //设置评论状态
-            setStatus: function () {
-                let para = {
-                    status: this.updateStatus,
-                    ids: this.sels.map(item => item.idStr).toString(),
-                };
-                this.listLoading = true;
-                roomUpdateSelectedComment(para).then(()=>{
-                    this.listLoading = false;
-                    this.getCommentData();
-                });
-            },
-            //格式化审核进度
-            formatCommtentCheck: function(row, column) {
-                return row[column.property] == 0 ? '待审核' : '已审核';
-            },
             //重置
             resetForm(formName) {
                 this.$refs[formName].resetFields();
-                this.studentInfo.school = '';
-                this.studentInfo.grade = '';
             }
         },
         //初始化操作
         mounted(){
-            this.getCommentData();
-            this.getCommentSize();
         },
     }
 </script>

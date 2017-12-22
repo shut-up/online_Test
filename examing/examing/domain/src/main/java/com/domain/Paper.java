@@ -1,6 +1,5 @@
 package com.domain;
 
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -8,12 +7,12 @@ import java.util.List;
 
 /**
  * @Author: walton
- * @Description: 试卷题目表
+ * @Description: 试卷表
  * @Createtime: 2017/11/28
  */
 
-@Document(collection="PaperDetail")
-public class PaperDetail extends BaseEntity{
+@Document(collection="Paper")
+public class Paper extends BaseEntity{
     private String title;
     private List<String> choiceAnswer;
     private String tfAnswer;

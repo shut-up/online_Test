@@ -49,9 +49,15 @@
                       this.loading = false;
                       //console.log("res"+res.data.name);
                       if (res.data !== undefined) {
-                          sessionStorage.setItem('name', res.data.name);   //将name存到sessionStorage
-                          sessionStorage.setItem('accountNumber', res.data.accountNumber);   //将name存到sessionStorage
-                          sessionStorage.setItem('type', res.data.type);   //将type存到sessionStorage
+                          if(this.checked) {
+                              localStorage.setItem('name', res.data.name);   //将name存到localStorage
+                              localStorage.setItem('accountNumber', res.data.accountNumber);   //将name存到localStorage
+                              localStorage.setItem('type', res.data.type);   //将type存到localStorage
+                          }else{
+                              sessionStorage.setItem('name', res.data.name);   //将name存到sessionStorage
+                              sessionStorage.setItem('accountNumber', res.data.accountNumber);   //将name存到sessionStorage
+                              sessionStorage.setItem('type', res.data.type);   //将type存到sessionStorage
+                          }
                           this.$message({
                               message: '登录成功',
                               type: 'success'

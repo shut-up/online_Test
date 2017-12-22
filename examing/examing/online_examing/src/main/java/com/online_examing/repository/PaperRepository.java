@@ -17,5 +17,6 @@ public interface PaperRepository extends MongoRepository<PaperDetail,Long> {
 
     public List<PaperDetail> findByTitleAndType(String title, int type);
 
+    public List<PaperDetail> findByType(int type);
 
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +42,13 @@ public class PaperService {
             long now = System.currentTimeMillis();
             paperDetail.setCreateTime(now);
         }
+        if(paperDetail.getType()==2){
+            String[] answer = paperDetail.getBlankAnswer().split("&");
+            List<String> blankAnswer_temp = new ArrayList<>();
+            for(String a : answer)
+                blankAnswer_temp.add(a);
+            paperDetail.setBlankAnswers(blankAnswer_temp);
+        }
         return paperRepository.save(paperDetail);
     }
 
@@ -68,15 +76,20 @@ public class PaperService {
         Sort sort = new Sort(order);
         Pageable pageable=new PageRequest(paperRequestDto.getPage()-1, paperRequestDto.getPageSize(), sort);//对数据进行分页
         List<PaperDetail> list =  paperRepository.findAll(pageable).getContent();
-        return list;
+        List<PaperDetail> result_list =  new ArrayList<>();
+        for(PaperDetail paperDetail : list){
+            if(paperDetail.getType()==paperRequestDto.getType())
+                result_list.add(paperDetail);
+        }
+        return result_list;
     }
 
     /**
-    *@Description:  获取题目的总数目
+    *@Description:  获取指定类型题目的总数目
     *@Date: 2017/12/4
     */
-    public  List<PaperDetail> getPaperSize(){
-        return paperRepository.findAll();
+    public  List<PaperDetail> getPaperSize(int type){
+        return paperRepository.findByType(type);
     }
 
     /**

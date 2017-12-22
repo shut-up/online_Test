@@ -32,7 +32,7 @@
             <el-table-column prop="selectionB" label="选项B"></el-table-column>
             <el-table-column prop="selectionC" label="选项C"></el-table-column>
             <el-table-column prop="selectionD" label="选项D"></el-table-column>
-            <el-table-column prop="answer" label="答案"></el-table-column>
+            <el-table-column prop="choiceAnswer" label="答案"></el-table-column>
             <el-table-column prop="createTime" label="创建时间" :formatter="formatDate"></el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
@@ -74,8 +74,8 @@
                 <el-form-item label="选项D" prop="selectionD">
                     <el-input v-model="addQuestionsForm.selectionD" style="width: 300px"></el-input>
                 </el-form-item>
-                <el-form-item label="答案" prop="answer">
-                    <el-select v-model="addQuestionsForm.answer" multiple clearable style="width: 300px" >
+                <el-form-item label="答案" prop="choiceAnswer">
+                    <el-select v-model="addQuestionsForm.choiceAnswer" multiple clearable style="width: 300px" >
                         <el-option v-for="item in answerType" :label="item.title" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
@@ -108,7 +108,7 @@
                     selectionB: '',
                     selectionC: '',
                     selectionD: '',
-                    answer: [],
+                    choiceAnswer: [],
                     type: 0,
                     status: 1,
                  },
@@ -136,13 +136,13 @@
                     selectionD: [
                         { required: true, message: '请输入D选项内容', trigger: 'blur' },
                     ],
-                    answer: [
+                    choiceAnswer: [
                         { type:"array", required: true, message: '请至少选择一个答案', trigger: 'change' },
                     ]
                 },
                 //查找条件
                 keywords: '',
-                type: 0,    //0为选择题
+                type: 0,    //0为判断题
                 page: 1,
                 pageSize: 8,
                 total: 0,
@@ -167,7 +167,7 @@
                     selectionB: '',
                     selectionC: '',
                     selectionD: '',
-                    answer: [],
+                    choiceAnswer: [],
                     type: 0,
                     status: "1",
                 };
@@ -259,7 +259,7 @@
                             this.addLoading = true;
                                 var para = $.extend({}, true, this.addQuestionsForm);
                                 para.id = para.idStr;
-                                console.log(para.answer + "   answer");
+                                console.log(para.choiceAnswer + "   answer");
                                 addQuestion(para).then((res) => {
                                     this.addLoading = false;
                                     if (this.checkResult(res, true, '添加成功')) {
@@ -299,20 +299,23 @@
             getQuestionList: function () {
                 let para = {
                     page: this.page,
-                    pageSize: this.pageSize
+                    pageSize: this.pageSize,
+                    type: 0,
                 };
                 this.listLoading = true;
                 getQuestionList(para).then((res)=>{
                     this.listLoading = false;
                     if (this.checkResult(res)){
-                        console.log(res.data+"res.data1111");
                         this.questions = res.data;
                     }
                 })
             },
             //获取选择题总数
             getQuestionSize: function () {
-                getQuestionSize().then((res)=>{
+                let para = {
+                    type: 0,
+                };
+                getQuestionSize(para).then((res)=>{
                     if (this.checkResult(res)){
                         this.total = res.data.length;
                     }

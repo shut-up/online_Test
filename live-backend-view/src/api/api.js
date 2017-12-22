@@ -19,7 +19,7 @@ export const addQuestion = params => {
     return axios.post(`${commentBase}user/paper/addQuestion`, params).then(res=>res.data);
 };
 export const getQuestionSize = params => {
-    return axios.get(`${commentBase}user/paper/getQuestionSize`).then(res=>res.data);
+    return axios.get(`${commentBase}user/paper/getQuestionSize`,{params:params}).then(res=>res.data);
 };
 export const getQuestionList = params => {
     return axios.get(`${commentBase}user/paper/getQuestionList`, {params:params} ).then(res=>res.data);

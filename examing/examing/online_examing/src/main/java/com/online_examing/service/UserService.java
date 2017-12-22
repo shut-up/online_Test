@@ -54,9 +54,15 @@ public class UserService {
     */
     public User updateInfo(User user){
         User existUser = userRepository.findByAccountNumber(user.getAccountNumber());
-        existUser.setPassword(user.getPassword());
-        existUser.setGrade(user.getGrade());
-        existUser.setSchool(user.getSchool());
+        if(user.getPassword()!=null) {
+            existUser.setPassword(user.getPassword());
+        }
+        if(user.getGrade()!=null) {
+            existUser.setGrade(user.getGrade());
+        }
+        if(user.getSchool()!=null) {
+            existUser.setSchool(user.getSchool());
+        }
         user =  userRepository.save(existUser);
         return user;
     }

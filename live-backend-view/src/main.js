@@ -24,8 +24,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    let user = sessionStorage.getItem('name');
-    let type = sessionStorage.getItem('type');
+    let user = sessionStorage.getItem('name')==null?localStorage.getItem('name'):sessionStorage.getItem('name');
+    let type = sessionStorage.getItem('type')==null?localStorage.getItem('type'):sessionStorage.getItem('type');
     if(to.path == '/register'){
       next()
     } else if (user == null && to.path != '/login') {
