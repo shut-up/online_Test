@@ -1,6 +1,7 @@
 package com.online_examing.repository;
 
 import com.domain.PaperDetail;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,5 +19,7 @@ public interface PaperRepository extends MongoRepository<PaperDetail,Long> {
     public List<PaperDetail> findByTitleAndType(String title, int type);
 
     public List<PaperDetail> findByType(int type);
+
+    public List<PaperDetail> findByType(int type, Sort sort);
 
 }

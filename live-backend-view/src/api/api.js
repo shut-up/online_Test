@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 let base = 'http://live-admin-api.letsport.com.cn/';
-let commentBase = "http://localhost:8015/";
+let commentBase = "http://localhost:8088/";
 
 /******* user *******/
 export const userLogin = params => {
@@ -12,6 +12,9 @@ export const userRegister = params => {
 };
 export const updateInfo = params => {
     return axios.post(`${commentBase}user/updateInfo`, params).then(res=>res.data);
+};
+export const getInfo = params => {
+    return axios.get(`${commentBase}user/getInfo`,{params:params}).then(res=>res.data);
 };
 
 /******* paper *******/

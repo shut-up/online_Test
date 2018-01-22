@@ -19,6 +19,7 @@ public interface Routes {
     String USER_LOGIN = "/login";
     String USER_REGISTER = "/register";
     String USER_UPDATEINFO = "/updateInfo";
+    String USER_GETINFO = "/getInfo";
 
     /**
      * Paper

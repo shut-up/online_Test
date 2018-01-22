@@ -28,7 +28,7 @@
                     <div  style="color: blue;cursor: pointer" @click="EditChoiceQuestion(scope.$index, scope.row)">{{scope.row.title}}</div>
                 </template>
             </el-table-column>
-            <el-table-column prop="blankAnswer" label="答案" :formatter="formatAnswer"></el-table-column>
+            <el-table-column prop="blankAnswer" label="答案" ></el-table-column>
             <el-table-column prop="createTime" label="创建时间" :formatter="formatDate"></el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
@@ -285,11 +285,11 @@
             formatDate: function (row, column) {
                 var newDate = new Date();
                 newDate.setTime(row[column.property]);
-                return util.formatDate.format(newDate, 'y-M-d h:m:s');
+                return util.formatDate.format(newDate, 'yyyy-MM-dd hh:mm:ss');
             },
             //格式化答案
 //            formatAnswer: function (row, column) {
-//                return row[column.property] == 0 ? '对' :  '错';
+//                return row[column.property].join("|");
 //            },
         },
         mounted(){

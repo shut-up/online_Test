@@ -2,6 +2,8 @@ package com.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 /**
  * @Author: walton
  * @Description: 用户表
@@ -14,8 +16,7 @@ public class User extends BaseEntity{
     private String name;
     private String password;
     private Integer type;   //0学生、1教师
-    private String grade;
-    private String school;
+    private List<ManagerClass> managerClasses;
 
     public String getName() {
         return name;
@@ -49,19 +50,11 @@ public class User extends BaseEntity{
         this.type = type;
     }
 
-    public String getGrade() {
-        return grade;
+    public List<ManagerClass> getManagerClasses() {
+        return managerClasses;
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public String getSchool() {
-        return school;
-    }
-
-    public void setSchool(String school) {
-        this.school = school;
+    public void setManagerClasses(List<ManagerClass> managerClasses) {
+        this.managerClasses = managerClasses;
     }
 }

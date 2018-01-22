@@ -108,13 +108,13 @@
                             updateInfo(para).then((res) => {
                                 if (res.data !== undefined) {
                                     this.$message({
-                                        message: '更新成功',
+                                        message: '修改成功',
                                         type: 'success'
                                     });
                                     this.resetForm('teacherInfo');
                                 }else{
                                     this.$message({
-                                        message: '更新失败',
+                                        message: '修改失败',
                                         type: 'error'
                                     });
                                 }

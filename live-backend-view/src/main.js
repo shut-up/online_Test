@@ -36,9 +36,9 @@ router.beforeEach((to, from, next) => {
         next({ path: '/myExam' })
     } else if(type == 1 && to.path == '/student'){
         alert("当前为教师账户，无权访问！")
-        next({ path: '/assignExam' })
-    } else {
-        next()
+        next({ path: '/choiceQuestion' })
+    } else{
+        next();
     }
 })
 

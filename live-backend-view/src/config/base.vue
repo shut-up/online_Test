@@ -2,31 +2,62 @@
 <script type="text/javascript">
     const defaultConfig =
         {
+            options: [
+                {
+                    value: 'zhinan',
+                    label: '信息学院',
+                    children: [{
+                        value: 'shejiyuanze',
+                        label: '软件工程',
+                    }, {
+                        value: 'daohang1',
+                        label: '网络工程',
+                    },
+                    {
+                        value: 'daohang',
+                        label: '软件服务外包',
+                    },
+                    {
+                        value: 'daohang',
+                        label: '教育技术',
+                    },
+                    {
+                        value: 'daohang',
+                        label: '计算机科学技术',
+                    },
+                    {
+                        value: 'daohang',
+                        label: '电子信息工程',
+                    }]
+                },
+                {
+                    value: 'zhinan',
+                    label: '物理学院',
+                    children: [{
+                        value: 'shejiyuanze',
+                        label: '设计原则',
+                    }, {
+                        value: 'daohang',
+                        label: '导航',
+                    }]
+                },
+                {
+                    value: 'zhinan',
+                    label: '体育学院',
+                    children: [{
+                        value: 'shejiyuanze',
+                        label: '游泳',
+                    }, {
+                        value: 'daohang',
+                        label: '水上运动',
+                    }]
+                }
+            ],
             gameStatus: [
                 {idStr: 0, title: "未开"},
                 {idStr: 1, title: "赛中"},
                 {idStr: 2, title: "结束"},
             ],
-            roomStatus: [
-                {idStr: 0, title: "显示"},
-                {idStr: 1, title: "隐藏"},
-            ],
-            operations: [
-                {idStr: 0, title: "显示"},
-                {idStr: 1, title: "隐藏"},
-                {idStr: 2, title: "推荐"},
-                {idStr: 3, title: "删除"},
-            ],
-            teamType: [
-                {idStr: 0, title: "国家"},
-                {idStr: 1, title: "队伍"},
-                {idStr: 2, title: "个人"},
-            ],
-            teamTypeKv: {
-                0: "国家",
-                1: "队伍",
-                2: "个人",
-            },
             defaultImg: {
                 icon: '/static/images/default/defaultIcon.jpg',
                 face: [
@@ -42,15 +73,6 @@
                         id: 1,
                     },
                 ]
-            },
-            baseUrl: {
-                "uploadUrl": "http://live-admin-api.letsport.com.cn/imgUpload/",
-                //"uploadUrl": "http://localhost:8090/imgUpload/",
-            },
-            commonFunc: {
-//                jump: function (where) {
-//                    _this.$router.push({ path: where });
-//                }
             },
         };
     export default {

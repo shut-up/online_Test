@@ -3,36 +3,31 @@
 
         <!--修改信息-->
         <el-col>
-            <el-form :model="managerInfo"  label-width="100px" class="demo-ruleForm">
+            <el-form ref="studentInfo"  :rules="studentInfoRules" :model="studentInfo"  label-width="100px" class="demo-ruleForm">
                 <el-form-item label="学号：" >
                     <el-tag type="info">{{accountNumber}}</el-tag>
                 </el-form-item>
                 <el-form-item label="姓名：" >
                     <el-tag type="info">{{name}}</el-tag>
                 </el-form-item>
-                <el-form-item label="班级：">
-                    <el-tag type="info" v-for="grade1 in managerInfo.managerClasses">{{grade1.grade}}{{grade1.school}}</el-tag>
-                </el-form-item>
-            </el-form>
-        </el-col>
-        <!--修改信息-->
-        <el-col>
-            <el-form ref="teacherInfo"  :rules="teacherInfoRules" :model="teacherInfo"  label-width="100px" class="demo-ruleForm">
-                <el-form-item label="年级：" prop="grade">
-                    <el-select clearable v-model="teacherInfo.grade">
+                <el-form-item label="年级：">
+                    <el-select clearable v-model="studentInfo.grade">
                         <el-option v-for="item in 2017-1990" :label="(item+1990)" :value="item+1990" :key="item+1990"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="学院：" prop="school">
-                    <el-select multiple clearable v-model="teacherInfo.school">
-                        <el-option label="信息学院" value="信息学院" key="信息学院"></el-option>
-                        <el-option label="物理学院" value="物理学院" key="物理学院"></el-option>
-                        <el-option label="外语学院" value="外语学院" key="外语学院"></el-option>
+                <el-form-item label="学院：">
+                    <el-cascader :options="option" @change="handleChange" v-model="studentInfo.school"></el-cascader>
+                </el-form-item>
+                <el-form-item label="学院：">
+                    <el-select clearable v-model="studentInfo.school">
+                        <el-option label="信息学院" value="信息学院"></el-option>
+                        <el-option label="物理学院" value="物理学院"></el-option>
+                        <el-option label="外语学院" value="外语学院"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="updateInfo()">立即修改</el-button>
-                    <el-button @click="resetForm('teacherInfo')">重置</el-button>
+                    <el-button @click="resetForm('studentInfo')">重置</el-button>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -41,32 +36,29 @@
 </template>
 
 <script>
-    import {getInfo, roomUpdateSelectedComment, updateInfo} from '../../api/api'
+    import {roomUpdateSelectedComment, updateInfo} from '../../api/api'
     import Util from "../../common/js/util";
     export default {
         data(){
+            var g = this.GLOBAL.defaultConfig;
             return {
-                teacherInfo: {
+                studentInfo: {
                     accountNumber: '',
                     name: '',
+                    password: '',
+                    newPassword: '',
                     checknewPassword: '',
-                    managerClasses: [],
                     school: [],
                     grade: '',
                 },
-                school: [],
+                option: g.options,
+                accountNumber: localStorage.getItem('accountNumber'),
+                name: localStorage.getItem('name'),
+                password: '',
+                newPassword: '',
+                checknewPassword: '',
+                school: '',
                 grade: '',
-                accountNumber: sessionStorage.getItem('accountNumber')==null?localStorage.getItem('accountNumber'):sessionStorage.getItem('accountNumber'),
-                name: sessionStorage.getItem('name')==null?localStorage.getItem('name'):sessionStorage.getItem('name'),
-                managerInfo: {},
-                teacherInfoRules: {
-                    school: [
-                        { type:"array", required: true, message: '请选择学院', trigger: 'change' }
-                    ],
-                    grade: [
-                        { type:"integer",required: true, message: '请选择年级', trigger: 'change' }
-                    ],
-                }
             };
         },
         methods: {
@@ -89,51 +81,63 @@
                 return false;
             },
             updateInfo: function () {
-                this.$refs.teacherInfo.validate((valid) => {
+                this.$refs.studentInfo.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             let para = {
                                 accountNumber: this.accountNumber,
-                                grade: this.teacherInfo.grade,
-                                school: this.teacherInfo.school,
-                            }
+                                grade: this.studentInfo.grade,
+                                school: this.studentInfo.school,
+                            };
                             updateInfo(para).then((res) => {
                                 if (res.data !== undefined) {
                                     this.$message({
                                         message: '更新成功',
                                         type: 'success'
                                     });
-                                    this.resetForm('teacherInfo');
+                                    this.resetForm('studentInfo');
                                 }else{
                                     this.$message({
                                         message: '更新失败',
                                         type: 'error'
                                     });
                                 }
-                                this.getTeacherInfo();
+                                this.$router.push({path: '/editStudentInfo'});
                             });
                         });
                     }
                 });
             },
-            getTeacherInfo: function () {
-              let para = {
-                  accountNumber: this.accountNumber
-              };
-                getInfo(para).then(res=>{
-                    this.managerInfo = res.data;
-                })
+            //设置评论状态
+            setStatus: function () {
+                let para = {
+                    status: this.updateStatus,
+                    ids: this.sels.map(item => item.idStr).toString(),
+                };
+                this.listLoading = true;
+                roomUpdateSelectedComment(para).then(()=>{
+                    this.listLoading = false;
+                    this.getCommentData();
+                });
+            },
+            //格式化审核进度
+            formatCommtentCheck: function(row, column) {
+                return row[column.property] == 0 ? '待审核' : '已审核';
+            },
+            handleChange(value) {
+                console.log(value);
             },
             //重置
             resetForm(formName) {
                 this.$refs[formName].resetFields();
-                this.teacherInfo.school = [];
-                this.teacherInfo.grade = '';
+                this.studentInfo.school = '';
+                this.studentInfo.grade = '';
             }
         },
         //初始化操作
         mounted(){
-            this.getTeacherInfo();
+            this.getCommentData();
+            this.getCommentSize();
         },
     }
 </script>

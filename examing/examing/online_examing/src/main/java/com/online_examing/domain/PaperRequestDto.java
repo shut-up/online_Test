@@ -13,6 +13,10 @@ public class PaperRequestDto implements Serializable {
     private int type;
     private int status;
     private String ids;
+    private long accountNumber;
+    private String grade;
+    private List<String> school;
+    private String password;
 
     public int getStatus() {
         return status;
@@ -62,4 +66,35 @@ public class PaperRequestDto implements Serializable {
         this.pageSize = pageSize;
     }
 
+    public long getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(long accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public List<String> getSchool() {
+        return school;
+    }
+
+    public void setSchool(List<String> school) {
+        this.school = school;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

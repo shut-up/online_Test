@@ -9,7 +9,8 @@ import participants from './views/participant/participants.vue';
 import myExam from './views/student/myExam.vue';
 import myPractice from './views/student/myPractice.vue';
 import myMark from './views/student/myMark.vue';
-import editStudentInfo from './views/student/editStudentInfo.vue';
+import editStudentPSW from './views/student/editStudentPSW.vue';
+import editStudentInfo from './views/student/improveStudentInfo.vue';
 //teacher
 import choiceQuestion from './views/teacher/choiceQuestion.vue';
 import blankFillingQuestion from './views/teacher/blankFillingQuestion.vue';
@@ -77,17 +78,8 @@ let routes = [
         iconCls:'fa fa-address-card',
         isStudent: true,
         children: [
-            { path: '/editStudentInfo', component: editStudentInfo,  name: "信息管理"}
-        ]
-    },
-    {
-        path: '/student',
-        component: studentHome,
-        name: '主播管理',
-        iconCls: 'fa fa-microphone',
-        isStudent: true,
-        children: [
-            { path: '/anchor', component: anchor,  name: "主播管理"}
+            { path: '/editStudentInfo', component: editStudentInfo,  name: "完善信息"},
+            { path: '/editStudentPSW', component: editStudentPSW,  name: "修改密码"}
         ]
     },
     //映射教师用户界面

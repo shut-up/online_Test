@@ -58,9 +58,20 @@ public class ExamController {
      * 用户更新信息
      */
     @PostMapping(Routes.USER_UPDATEINFO)
-    public RestResult updateInfo(@RequestBody User user){
+    public RestResult updateInfo(@RequestBody PaperRequestDto paperRequestDto){
         RestDoing restDoing = restResult ->{
-            restResult.data = userService.updateInfo(user);
+            restResult.data = userService.updateInfo(paperRequestDto);
+        };
+        return restDoing.go(null, logger);
+    }
+
+    /**
+     * 获取用户信息
+     */
+    @GetMapping(Routes.USER_GETINFO)
+    public RestResult getInfo(User user){
+        RestDoing restDoing = restResult ->{
+            restResult.data = userService.getInfo(user);
         };
         return restDoing.go(null, logger);
     }

@@ -291,7 +291,7 @@
             formatDate: function (row, column) {
                 var newDate = new Date();
                 newDate.setTime(row[column.property]);
-                return util.formatDate.format(newDate, 'y-M-d h:m:s');
+                return util.formatDate.format(newDate, 'yyyy-MM-dd hh:mm:ss');
             },
             //格式化答案
             formatAnswer: function (row, column) {

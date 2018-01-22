@@ -103,7 +103,7 @@ public class PaperService {
         Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createTime");
         Sort sort = new Sort(order);
         //获取所有试卷
-        List<PaperDetail> paperDetailList_temp = paperRepository.findAll(sort);
+        List<PaperDetail> paperDetailList_temp = paperRepository.findByType(paperRequestDto.getType(),sort);
         //获取模糊关键词
         String keywords = paperRequestDto.getKeywords();
         //匹配模糊的关键词的试卷

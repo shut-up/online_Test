@@ -16,21 +16,6 @@
                 <el-form-item prop="checknewPassword" label="确认密码：">
                     <el-input type="password" v-model="studentInfo.checknewPassword" auto-complete="off" placeholder="请再次输入新密码"></el-input>
                 </el-form-item>
-                <el-form-item label="年级：">
-                    <el-select clearable v-model="studentInfo.grade">
-                        <el-option label="2014" value="2014"></el-option>
-                        <el-option label="2015" value="2015"></el-option>
-                        <el-option label="2016" value="2016"></el-option>
-                        <el-option label="2017" value="2017"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="学院：">
-                    <el-select clearable v-model="studentInfo.school">
-                        <el-option label="信息学院" value="信息学院"></el-option>
-                        <el-option label="物理学院" value="物理学院"></el-option>
-                        <el-option label="外语学院" value="外语学院"></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="updateInfo()">立即修改</el-button>
                     <el-button @click="resetForm('studentInfo')">重置</el-button>
@@ -42,7 +27,7 @@
 </template>
 
 <script>
-    import { updateInfo } from '../../api/api'
+    import {roomUpdateSelectedComment, updateInfo} from '../../api/api'
     import Util from "../../common/js/util";
     export default {
         data(){
@@ -75,8 +60,8 @@
                     school: '',
                     grade: '',
                 },
-                accountNumber: sessionStorage.getItem('accountNumber'),
-                name: sessionStorage.getItem('name'),
+                accountNumber: localStorage.getItem('accountNumber'),
+                name: localStorage.getItem('name'),
                 password: '',
                 newPassword: '',
                 checknewPassword: '',
@@ -92,12 +77,6 @@
                         { required: true, message: '请再次输入新密码', trigger: 'blur' },
                         { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' },
                         { validator: validatePass2, trigger: 'blur' }
-                    ],
-                    school: [
-                        { required: true, message: '请选择学院', trigger: 'change' }
-                    ],
-                    grade: [
-                        { required: true, message: '请选择年级', trigger: 'change' }
                     ],
                 }
             };
@@ -128,10 +107,7 @@
                             let para = {
                                 accountNumber: this.accountNumber,
                                 password: this.studentInfo.newPassword,
-                                grade: this.studentInfo.grade,
-                                school: this.studentInfo.school,
                             };
-                            //let para = Object.assign({}, this.studentInfo);
                             updateInfo(para).then((res) => {
                                 if (res.data !== undefined) {
                                     this.$message({
@@ -145,7 +121,7 @@
                                         type: 'error'
                                     });
                                 }
-                                this.$router.push({path: '/editStudentInfo'});
+                                this.$router.push({path: '/editStudentPSW'});
                             });
                         });
                     }
