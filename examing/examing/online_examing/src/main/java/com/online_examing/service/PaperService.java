@@ -72,16 +72,19 @@ public class PaperService {
     *@Date: 2017/12/4
     */
     public List<PaperDetail> getPaperList(PaperRequestDto paperRequestDto){
-        Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createTime");
-        Sort sort = new Sort(order);
-        Pageable pageable=new PageRequest(paperRequestDto.getPage()-1, paperRequestDto.getPageSize(), sort);//对数据进行分页
-        List<PaperDetail> list =  paperRepository.findAll(pageable).getContent();
-        List<PaperDetail> result_list =  new ArrayList<>();
-        for(PaperDetail paperDetail : list){
-            if(paperDetail.getType()==paperRequestDto.getType())
-                result_list.add(paperDetail);
+        if(paperRequestDto.getType()==3){
+            Sort.Order order = new Sort.Order(Sort.Direction.ASC,"type");
+            Sort sort = new Sort(order);
+            return paperRepository.findAll(sort);
+        } else{
+            Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createTime");
+            Sort sort = new Sort(order);
+            Pageable pageable=new PageRequest(paperRequestDto.getPage()-1, paperRequestDto.getPageSize(), sort);//对数据进行分页
+            List<PaperDetail> list =  paperRepository.findByType(paperRequestDto.getType(),pageable);
+            return list;
         }
-        return result_list;
+
+
     }
 
     /**
@@ -98,34 +101,15 @@ public class PaperService {
     */
     public Map searchQuestion(PaperRequestDto paperRequestDto){
         //总页数
-        int total = 0;
         //按时间降序排序
         Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createTime");
         Sort sort = new Sort(order);
-        //获取所有试卷
-        List<PaperDetail> paperDetailList_temp = paperRepository.findByType(paperRequestDto.getType(),sort);
-        //获取模糊关键词
-        String keywords = paperRequestDto.getKeywords();
-        //匹配模糊的关键词的试卷
-        List<PaperDetail> paperDetailList = new ArrayList<>();
-        for (PaperDetail paper : paperDetailList_temp) {
-            if (paper.getTitle().indexOf(keywords) != -1) {//数据库与前台数据一一匹配，没有的话等于-1
-                paperDetailList.add(paper);
-            }
-        }
-        total = paperDetailList.size();
-        //当前页数的试卷
-        List<PaperDetail> result = new ArrayList<>();
-        int start = (paperRequestDto.getPage()-1) * paperRequestDto.getPageSize();
-        int end = start + paperRequestDto.getPageSize() - 1;
-        for(int i = start; i <= end; i++){
-            if(i >= total)
-                break;
-            result.add(paperDetailList.get(i));
-        }
+        Pageable pageable = new PageRequest(paperRequestDto.getPage()-1,paperRequestDto.getPageSize(),sort);
+        List<PaperDetail> paper = paperRepository.findByTitleContainingAndType(paperRequestDto.getKeywords(),paperRequestDto.getType(),pageable);
+        int total = paperRepository.findByTitleContainingAndType(paperRequestDto.getKeywords(),paperRequestDto.getType()).size();
         Map resultMap = new HashMap();
         resultMap.put("total",total);
-        resultMap.put("list",result);
+        resultMap.put("list",paper);
         return resultMap;
     }
 
