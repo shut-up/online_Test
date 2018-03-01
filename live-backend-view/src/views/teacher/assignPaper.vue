@@ -5,30 +5,34 @@
             <el-tab-pane label="选择班级" name="first"></el-tab-pane>
             <el-tab-pane label="考试时间" name="second"></el-tab-pane>
             <el-tab-pane label="选择题目" name="third"></el-tab-pane>
-            <el-tab-pane label="生成试卷" name="fourth"></el-tab-pane>
+            <!--<el-tab-pane label="生成试卷" name="fourth"></el-tab-pane>-->
         </el-tabs>
         <br><br>
-        <el-form ref="exam"  :rules="examRules" :model="examDetail"  label-width="100px" class="demo-ruleForm">
+        <el-form ref="exam"  :rules="examRules" :model="examForm"  label-width="100px" class="demo-ruleForm">
+            <el-form-item label="试卷名称：" >
+                <el-input v-model="examForm.title" placeholder="请输入试卷名称"></el-input>
+            </el-form-item>
             <el-form-item label="考试班级：" >
-                <el-tag v-for="examClass in checkedClass" :key="examClass" closable @close="handleCloseClass(examClass)">
+                <el-tag v-for="examClass in examForm.checkedClass" :key="examClass" closable @close="handleCloseClass(examClass)">
                     {{examClass}}
                 </el-tag>
             </el-form-item>
             <el-form-item label="考试时间：" >
-                {{examTimeShow}}
+                {{examForm.examTimeShow}}
             </el-form-item>
             <el-form-item label="考试题目：" >
-                <el-table :data="selectQuestion" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" ref="examRef" >
+                <el-table :data="examForm.selectQuestion" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" ref="examRef" >
                     <el-table-column property="type" sortable label="题目类型" width="150" :formatter="formatQuestionType"></el-table-column>
                     <el-table-column property="title" label="题目" width="200"></el-table-column>
                     <el-table-column property="selectionA" label="选项A"></el-table-column>
                     <el-table-column property="selectionB" label="选项B"></el-table-column>
                     <el-table-column property="selectionC" label="选项C"></el-table-column>
                     <el-table-column property="selectionD" label="选项D"></el-table-column>
+                    <el-table-column property="score" label="分值"></el-table-column>
                 </el-table>
             </el-form-item>
             <el-form-item align="center">
-                <el-button type="primary" @click="createPaper">生成试卷</el-button>
+                <el-button type="primary" @click="createPaper" v-text="buttonName"></el-button>
             </el-form-item>
         </el-form>
 
@@ -63,38 +67,39 @@
                 <el-table-column property="choiceanswer" label="选择题答案"></el-table-column>
                 <el-table-column property="tfAnswer" label="判断题答案"></el-table-column>
                 <el-table-column property="blankAnswer" label="填空题答案" width="200"></el-table-column>
+                <el-table-column property="score" label="分值"></el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancelSelectQuestions">取 消</el-button>
                 <el-button type="primary" @click="confirmSelectQuestions">确 定</el-button>
             </div>
         </el-dialog>
-        <el-dialog title="生成试卷" :visible.sync="createPaperVisible">
-            <el-form ref="exam"  :rules="examRules" :model="examDetail"  label-width="100px" class="demo-ruleForm">
-                <el-form-item label="考试班级：" >
-                    <el-tag v-for="examClass in checkedClass" :key="examClass" closable @close="handleCloseClass(examClass)">
-                        {{examClass}}
-                    </el-tag>
-                </el-form-item>
-                <el-form-item label="考试时间：" >
-                    {{examTimeShow}}
-                </el-form-item>
-                <el-form-item label="考试题目：" >
-                    <el-table :data="selectQuestion" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" ref="examRef" >
-                        <el-table-column property="type" sortable label="题目类型" width="150" :formatter="formatQuestionType"></el-table-column>
-                        <el-table-column property="title" label="题目" width="200"></el-table-column>
-                        <el-table-column property="selectionA" label="选项A"></el-table-column>
-                        <el-table-column property="selectionB" label="选项B"></el-table-column>
-                        <el-table-column property="selectionC" label="选项C"></el-table-column>
-                        <el-table-column property="selectionD" label="选项D"></el-table-column>
-                    </el-table>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="cancelCreatePaper">取 消</el-button>
-                <el-button type="primary" @click="confirmCreatePaper">确 定</el-button>
-            </div>
-        </el-dialog>
+        <!--<el-dialog title="生成试卷" :visible.sync="createPaperVisible">-->
+            <!--<el-form ref="exam"  :rules="examRules" :model="examDetail"  label-width="100px" class="demo-ruleForm">-->
+                <!--<el-form-item label="考试班级：" >-->
+                    <!--<el-tag v-for="examClass in checkedClass" :key="examClass" closable @close="handleCloseClass(examClass)">-->
+                        <!--{{examClass}}-->
+                    <!--</el-tag>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="考试时间：" >-->
+                    <!--{{examTimeShow}}-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="考试题目：" >-->
+                    <!--<el-table :data="selectQuestion" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" ref="examRef" >-->
+                        <!--<el-table-column property="type" sortable label="题目类型" width="150" :formatter="formatQuestionType"></el-table-column>-->
+                        <!--<el-table-column property="title" label="题目" width="200"></el-table-column>-->
+                        <!--<el-table-column property="selectionA" label="选项A"></el-table-column>-->
+                        <!--<el-table-column property="selectionB" label="选项B"></el-table-column>-->
+                        <!--<el-table-column property="selectionC" label="选项C"></el-table-column>-->
+                        <!--<el-table-column property="selectionD" label="选项D"></el-table-column>-->
+                    <!--</el-table>-->
+                <!--</el-form-item>-->
+            <!--</el-form>-->
+            <!--<div slot="footer" class="dialog-footer">-->
+                <!--<el-button @click="cancelCreatePaper">取 消</el-button>-->
+                <!--<el-button type="primary" @click="confirmCreatePaper">确 定</el-button>-->
+            <!--</div>-->
+        <!--</el-dialog>-->
     </section>
 </template>
 <script>
@@ -102,6 +107,8 @@
     import {} from '../../api/api'
     import {getInfo} from "../../api/api";
     import {getQuestionList} from "../../api/api";
+    import {getExamPaperById} from "../../api/api";
+    import {createOrUpdatePaper} from "../../api/api";
     export default {
         data(){
             return {
@@ -114,9 +121,16 @@
                 managerClass: {},
                 myClass: [],
                 checkedClass: [],
+                title: "",
                 checkAll: false,
                 isIndeterminate: true,
-                examDetail:{},
+                examForm:{
+                    title: "",
+                    checkedClass: [],
+                    examTimeShow: "",
+                    selectQuestion: [],
+                },
+                examDetail: {},
                 examRules: {},
                 questions: [],
                 selectQuestion: [],
@@ -126,6 +140,8 @@
                 visiable: '',
                 examTime: [new Date(2018, 1, 1, 9, 0), new Date(2018, 1, 1, 11, 0)],
                 examTimeShow: "",
+                examId: "",
+                buttonName: "生成试卷",
             };
         },
         methods: {
@@ -150,6 +166,7 @@
             },
             confirmSelectClass: function () {
                 this.selectClassVisible = false;
+                this.examForm.checkedClass = this.checkedClass;
             },
             //考试时间
             cancelExamTime: function () {
@@ -162,6 +179,7 @@
                     var endTime = util.formatDate.format(new Date(this.examTime[1]),'yyyy-MM-dd hh:mm:ss');
                     this.examTimeShow = beginTime + " -- " + endTime;
                 }
+                this.examForm.examTimeShow = this.examTimeShow;
                 this.examTimeVisiable = false;
             },
             //考试题目
@@ -177,6 +195,7 @@
                     var s = this.questions.filter((r) => r.idStr == id[i]);
                     this.selectQuestion.push(s[0]);
                 }
+                this.examForm.selectQuestion = this.selectQuestion;
                 this.active = 2;
                 this.selectQuestionVisible = false;
             },
@@ -185,11 +204,50 @@
                 this.createPaperVisible = false;
             },
             confirmCreatePaper: function () {
-//                _.isUndefined(this.currentAnchor) || _.isEmpty(this.currentAnchor)
                 this.createPaperVisible = false;
             },
             createPaper: function () {
-
+                if(this.examForm.title==""){
+                    this.$message({
+                        message: '请输入试卷名称',
+                        type: 'error'
+                    });
+                    return;
+                }else if( this.examForm.checkedClass==""){
+                    this.$message({
+                        message: '请先选择考试班级',
+                        type: 'error'
+                    });
+                    return;
+                }else if(this.examForm.examTimeShow==""){
+                    this.$message({
+                        message: '请选择考试时间',
+                        type: 'error'
+                    });
+                    return;
+                }else if(this.examForm.selectQuestion==""){
+                    this.$message({
+                        message: '请选择试卷题目',
+                        type: 'error'
+                    });
+                    return;
+                }
+                let para = {
+                    id: this.examId,
+                    title: this.examForm.title,
+                    examClass: this.checkedClass,
+                    beginTime: (new Date(this.examTime[0])).getTime(),
+                    endTime: (new Date(this.examTime[1])).getTime(),
+                    examQuestion: this.examForm.selectQuestion,
+                };
+                createOrUpdatePaper(para).then(res=>{
+                    this.$message({
+                        message: this.buttonName + '成功',
+                        type: 'success'
+                    });
+                    this.$router.push({ path: '/assignPaper'})
+                    this.resetForm();
+                });
             },
             //获取数据库所有题目
             getQuestionList: function () {
@@ -209,11 +267,10 @@
                 getInfo(para).then(res=>{
                     this.managerClass = res.data.managerClasses;
                     for(var i = 0; i< this.managerClass.length; i++){
-                        for(var j = 0; j< this.managerClass[i].school.length; j++){
-                            var s = this.managerClass[i].grade + this.managerClass[i].school[j];
+                        for(var j = 0; j< this.managerClass[i].major.length; j++){
+                            var s = this.managerClass[i].grade + this.managerClass[i].school+this.managerClass[i].major[j];
                             this.myClass.push(s);
                         }
-
                     }
                 });
             },
@@ -222,6 +279,35 @@
             },
             selsChange: function (sels) {
                 this.sels = sels;
+            },
+            initPage: function () {
+                let para = {
+                    examId: this.examId,
+                };
+                getExamPaperById(para).then(res=>{
+                   this.examForm = res;
+                   this.examForm.checkedClass = res.examClass;
+                   this.checkedClass = res.examClass;
+                   var beginTime = this.formatTime(res.beginTime);
+                   var endTime = this.formatTime(res.endTime);
+                   this.examForm.examTimeShow = beginTime + " -- " + endTime;
+                   this.examForm.selectQuestion = res.examQuestion;
+                   this.buttonName = "更新试卷";
+                });
+            },
+            formatTime: function (time) {
+                var newDate = new Date();
+                newDate.setTime(time);
+                return util.formatDate.format(newDate, 'yyyy-MM-dd hh:mm:ss');
+            },
+            resetForm: function () {
+                this.examForm.title = "";
+                this.examForm.checkedClass=[];
+                this.checkedClass=[];
+                this.examForm.examTimeShow = "";
+                this.examForm.selectQuestion = [];
+                this.sels = [];
+                this.buttonName = "生成试卷";
             },
             handleClick(tab) {
                 if(tab.name == "first"){
@@ -252,7 +338,27 @@
                 }
             },
         },
+        watch:{
+            $route(){
+                this.examId = this.$route.params.examId;
+            },
+            examId:function (current,old) {
+                setTimeout(() => {
+                    if ( this.examId != "" && this.examId != null && !_.isUndefined(this.examId)) {
+                        this.initPage();
+                    }else {
+                        this.resetForm();
+                    }
+                }, 500);
+            }
+        },
         mounted(){
+            this.examId = this.$route.query.examId;
+            if(!_.isUndefined(this.examId) && !_.isEmpty(this.examId)){
+                this.initPage();
+            }else{
+                this.resetForm();
+            }
             this.getClass();
             this.getQuestionList();
         },

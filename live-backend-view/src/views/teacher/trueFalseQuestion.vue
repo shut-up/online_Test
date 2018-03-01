@@ -57,6 +57,9 @@
                 <el-form-item label="题目" prop="title">
                     <el-input v-model="addQuestionsForm.title" style="width: 300px"></el-input>
                 </el-form-item>
+                <el-form-item label="分值" prop="score">
+                    <el-input v-model="addQuestionsForm.score" style="width: 300px"></el-input>
+                </el-form-item>
                 <el-form-item label="答案" prop="tfAnswer">
                     <el-select v-model="addQuestionsForm.tfAnswer"  clearable style="width: 300px" >
                         <el-option v-for="item in answerType" :label="item.title" :key="item.value" :value="item.value"></el-option>
@@ -90,6 +93,7 @@
                     tfAnswer: "",
                     type: 1,
                     status: 1,
+                    score: 0,
                 },
                 //答案选项
                 answerType:[

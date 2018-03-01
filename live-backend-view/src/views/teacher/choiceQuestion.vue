@@ -74,6 +74,9 @@
                 <el-form-item label="选项D" prop="selectionD">
                     <el-input v-model="addQuestionsForm.selectionD" style="width: 300px"></el-input>
                 </el-form-item>
+                <el-form-item label="分值" prop="score">
+                    <el-input v-model="addQuestionsForm.score" style="width: 300px"></el-input>
+                </el-form-item>
                 <el-form-item label="答案" prop="choiceAnswer">
                     <el-select v-model="addQuestionsForm.choiceAnswer" multiple clearable style="width: 300px" >
                         <el-option v-for="item in answerType" :label="item.title" :key="item.value" :value="item.value"></el-option>
@@ -109,6 +112,7 @@
                     selectionC: '',
                     selectionD: '',
                     choiceAnswer: [],
+                    score: 0,
                     type: 0,
                     status: 1,
                  },

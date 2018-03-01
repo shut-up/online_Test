@@ -1,308 +1,159 @@
 <template>
     <section>
         <el-col :span="24" class="toolbar">
-            <el-form :inline="true" :model="filters">
-                <el-form-item label="大类">
-                    <el-select v-model="filters.catalogId" placeholder="全部" clearable>
-                        <el-option
-                                v-for="item in catalogs"
-                                :key="item.idStr"
-                                :value="item.idStr"
-                                :label="item.title"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="比赛状态" placeholder="全部">
-                    <el-select v-model="filters.gameStatus" clearable>
-                        <el-option
-                                v-for="item in gameStatus"
-                                :key="item.idStr"
-                                :value="item.idStr"
-                                :label="item.title"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="直播间状态">
-                    <el-select v-model="filters.status" clearable>
-                        <el-option
-                                v-for="item in roomStatus"
-                                :key="item.idStr"
-                                :value="item.idStr"
-                                :label="item.title"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="时间">
-                    <el-date-picker
-                            v-model="filters.timeRange"
-                            type="datetimerange"
-                            placeholder="开始和结束时间"
-                            align="right"
-                            clearable
-                    >
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                    <el-input v-model="filters.searchTitle" placeholder="输入直播间名称或队名"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button icon="search" @click="searchList">搜索</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button icon="plus" @click="addRoom">新建直播间</el-button>
-                </el-form-item>
-            </el-form>
-        </el-col>
+            <el-form ref="exam"  :model="examPaper"  label-width="100px" class="demo-ruleForm">
+                <el-form-item  >
+                    <el-table :data="allPaper" highlight-current-row  @selection-change="selsChange" style="width: 100%;" ref="examRef" >
+                        <el-table-column property="title" label="试卷名称" width="200"></el-table-column>
+                        <el-table-column property="beginTime" label="考试开始时间" :formatter="formatTime"></el-table-column>
+                        <el-table-column property="endTime" label="考试结束时间" :formatter="formatTime"></el-table-column>
+                        <el-table-column property="examQuestion" label="考试状态">
+                            <template scope="scope">
+                                <div style="color:blue;cursor: pointer" @click="startTest(scope.$index, scope.row)">
+                                    开始考试
+                                </div>
+                            </template>
+                        </el-table-column>
+                    </el-table>
 
-        <el-table :data="rooms"
-                  highlight-current-row
-                  v-loading="listLoading"
-                  @selection-change="selectChange"
-                  style="width: 100%;"
-                  ref="roomRef"
-        >
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="idStr" label="直播ID" width="180">
-                <template scope="scope">
-                    <div class="blue" @click="editRoom(scope.$index, scope.row)">
-                        {{ scope.row.idStr}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="catalog.title" label="类型" width="70">
-            </el-table-column>
-            <el-table-column prop="status" label="状态" width="65" :formatter="formatStatus">
-            </el-table-column>
-            <el-table-column prop="title" label="名称" min-width="200">
-            </el-table-column>
-            <el-table-column prop="hostTeam" label="对阵" width="200" :formatter="formatAgainst">
-            </el-table-column>
-            <el-table-column prop="textAnchor" label="图文主播" :formatter="formatAnchors" width="95">
-            </el-table-column>
-            <el-table-column prop="audioAnchor" label="音频主播" :formatter="formatAnchors" width="95">
-            </el-table-column>
-            <el-table-column prop="gameStatus" label="赛况" width="70" :formatter="formatGameStatus">
-            </el-table-column>
-            <el-table-column prop="prospectId" label="前瞻" width="70" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="battlefieldId" label="战报" width="70" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="handWriting" label="附注" width="70" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="beginTime" label="开始时间" width="160" :formatter="formatTime">
-            </el-table-column>
-            <el-table-column prop="endTime" label="结束时间" width="160" :formatter="formatTime">
-            </el-table-column>
-            <el-table-column label="操作" width="140">
-                <template scope="scope">
-                    <div class="moreContent" @click="goLive(scope.$index, scope.row)">进入直播间</div>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-col :span="24" class="toolbar">
-            <el-form :inline="true"  v-model="operations">
-                <el-form-item>
-                    <el-select v-model="operations.oType">
-                        <el-option key="1" value="1" label="操作"></el-option>
-                    </el-select>
                 </el-form-item>
-                <el-form-item>
-                    <el-select v-model="operations.status" :disabled="this.selectedItems.length===0">
-                        <el-option
-                            v-for="item in status"
-                            :key="item.idStr"
-                            :value="item.idStr"
-                            :label="item.title"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="updateRoomStatus" :disabled="this.selectedItems.length===0">确定</el-button>
-                </el-form-item>
-                <el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-                </el-pagination>
             </el-form>
+            <el-dialog :title="title" :visible="paperVisible" :show-close="false" :fullscreen="true" > <p align="right" style="color: red;font-weight:bold;" >剩余时间{{minutes}}:{{seconds}}</p>
+                <div v-for="(question,index) in examQuestions" :key="question.title"><br>
+                    {{index+1}}、<span style="font-weight:bold;">{{question.title}}</span><span style="color: red">   （{{question.score}}分）</span><br><br>
+                   <div v-if="question.type === 0">
+                        <el-radio v-model="selectAnswers[index]" label="A" border size="medium">{{question.selectionA}}</el-radio><br><br>
+                        <el-radio v-model="selectAnswers[index]" label="B" border size="medium">{{question.selectionB}}</el-radio><br><br>
+                        <el-radio v-model="selectAnswers[index]" label="C" border size="medium">{{question.selectionC}}</el-radio><br><br>
+                        <el-radio v-model="selectAnswers[index]" label="D" border size="medium">{{question.selectionD}}</el-radio><br><br>
+                   </div>
+                    <div v-if="question.type === 1">
+                        <el-radio v-model="tfAnswers[index]" label="t" border size="medium">对</el-radio><br><br>
+                        <el-radio v-model="tfAnswers[index]" label="f" border size="medium">错</el-radio><br><br>
+                    </div>
+                    <div v-if="question.type === 2">
+                        <el-input placeholder="请输入答案，多个答案之间用&隔开" v-model="fullAnswer[index]" clearable></el-input>
+                    </div>
+                </div>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="submitPaper()">交 卷</el-button>
+                </div>
+            </el-dialog>
         </el-col>
     </section>
 </template>
 <script>
-    import Util from '../../common/js/util';
-    import {roomStatusUpate,roomGetList,roomGetSearch,roomGetAllCatalog,roomGetSize} from '../../api/api';
+    import util from '../../common/js/util';
+    import {getInfo, getPaper} from "../../api/api";
     export default {
         data(){
-            var g = this.GLOBAL.defaultConfig;
             return {
-                /** config **/
-                page: 1,
-                pageSize: 15,
-                total: 0,
-
-                filters: {
-                    timeRange: [],
-                    catalogId: "",
-                    gameStatus: "",
-                    status: "",
-                    searchTitle: ""
-                },
-                operations: {
-                    oType: "1",
-                    status: "",
-                },
-                status: g.operations,
-                catalogs: [
-
-                ],
-                gameStatus: g.gameStatus,
-                roomStatus: g.roomStatus,
-                rooms: [
-                ],
-                listLoading: false,
-                selectedItems: [],
+                studentInfo: {},
+                accountNumber: localStorage.getItem('accountNumber'),
+                allPaper: [],
+                examPaper: {},
+                paperVisible: false,
+                examQuestions: [],
+                selectAnswers: [],
+                tfAnswers: [],
+                fullAnswer: [],
+                title: "",
+                minutes:0,
+                seconds:0,
             };
         },
         methods:{
-            /** testapi **/
-            getCel: function (row, column, cell, event) {
+            num:function (n) {
+                return n<10 ? "0" + n : "" + n
             },
-
-            /** formatter **/
-            formatAgainst: function (row, column) {
-                var ret = new Array();
-                var left = new Array();
-                var right = new Array();
-                for (let i=0; i<row.hostTeam.length; i++){
-                    left.push(row.hostTeam[i].title);
-                    right.push(row.guestTeam[i].title);
-                }
-               return "["+left.join("&") + "]vs[" + right.join("&") + "]";
-            },
-            formatStatus: function (row, column) {
-               return row[column.property] == 0 ? '显示' :
-                   (row[column.property] == 1) ? '隐藏' : '推荐';
-            },
-            formatGameStatus: function (row, column) {
-               return row[column.property] == 0 ? '未开'
-                   : row[column.property] == 1 ? '赛中'
-                       : '结束';
-            },
-            formatTime: function(row, column) {
-               if (row[column.property] == 0 || row[column.property] == null) {
-                   return "";
-               }
-               let date = new Date(row[column.property]);
-               return Util.formatDate.format(date,'y-M-d h:m:s');
-            },
-            formatAnchors: function (row, column) {
-                let ret = new Array();
-                for (let i=0; i<row[column.property].length; i++){
-                    ret.push(row[column.property][i].title)
-                }
-                return ret.join("&")
-            },
-
-            /** opera room **/
-            searchList: function () {
-                let para = _.cloneDeep(this.filters);
-                if (!_.isEmpty(para.timeRange)){
-                    para.beginTime = (new Date(para.timeRange[0])).getTime();
-                    para.endTime = (new Date(para.timeRange[1])).getTime();
-                }
-                roomGetSearch(para).then((res)=>{
-                    if (this.checkResult(res, true)){
-                        this.rooms = res.data.list;
-                        this.total = res.data.total;
+            //倒计时
+            timer:function () {
+                var _this = this;
+                var time = window.setInterval(function () {
+                    if (_this.seconds == 0 && _this.minutes != 0) {
+                        _this.seconds = 59;
+                        _this.minutes -= 1;
+                    }else if(_this.minutes == 0 && _this.seconds == 0){
+                        _this.seconds = 0;
+                        window.clearInterval(time);
+                        alert('完美')
+                    }else{
+                        _this.seconds -= 1
                     }
-                });
+
+                },1000);
             },
-            updateRoomStatus: function () {
+            startTest: function (index, row) {
+                this.paperVisible = true;
+                this.examQuestions = $.extend(true, {}, row).examQuestion;
+                this.title  = $.extend(true, {}, row).title;
+                //毫秒数转为分钟数，并四舍五入
+                this.minutes = Math.round(( $.extend(true, {}, row).endTime - $.extend(true, {}, row).beginTime ) * 0.0000167);
+                this.timer();
+                console.log(this.examQuestions.length+"长度"+this.minutes);
+            },
+            formatTime: function (row, column) {
+                var newDate = new Date();
+                newDate.setTime(row[column.property]);
+                return util.formatDate.format(newDate, 'yyyy-MM-dd hh:mm:ss');
+            },
+            selsChange: function () {
+
+            },
+            getStudentPaper: function () {
                 let para = {
-                    status: this.operations.status,
-                    ids: this.selectedItems.map(res=>res.idStr)
-                }
-                roomStatusUpate(para).then((res)=>{
-                    if (this.checkResult(res, true)){
-                        this.getRoomList();
-                    }
-                })
-            },
-
-
-            /** jump to other page **/
-            addRoom: function () {
-                this.$router.push({ path: '/editRoom'});
-            },
-            editRoom: function (index, row) {
-                this.$router.push({ path: '/editRoom/?roomId=' + row.idStr})
-            },
-            goLive: function (index, row) {
-                this.$router.push({ path: '/liveRoom/?roomId=' + row.idStr})
-            },
-
-            selectChange: function (items) {
-                this.selectedItems = items;
-            },
-
-            checkResult: function (result, noSuccessMessage) {
-                if (result.code == "1"){
-                    if (noSuccessMessage){
-                        this.$message({
-                            message: "操作成功",
-                            type: "success",
-                        })
-                    }
-                    return true;
-                }else {
-                    this.$message({
-                        message: "操作失败,错误信息:"+result.desc,
-                        type: "error",
-                    })
-                    return false;
-                }
-            },
-
-            //page
-            handleCurrentChange: function (val) {
-              this.page = val;
-            },
-
-            /** init **/
-            getRoomSize: function () {
-                roomGetSize().then((res)=>{
-                    if (this.checkResult(res)){
-                        this.total = res.data;
-                    }
-                })
-            },
-            getAllCatalogs: function () {
-                roomGetAllCatalog().then((res)=>{
-                    if (this.checkResult(res)){
-                        this.catalogs = res.data;
-                    }
-                })
-            },
-            getRoomList: function () {
-                let para = {
-                  page: this.page,
-                  pageSize: this.pageSize
+                    accountNumber: this.accountNumber
                 };
-                this.listLoading = true;
-                roomGetList(para).then((res)=>{
-                    this.listLoading = false;
-                    if (this.checkResult(res)){
-                        this.rooms = res.data;
-                    }
+                getInfo(para).then(res=>{
+                    this.studentInfo = res.data;
+                });
+                setTimeout(() => {
+                    let paperPara = {
+                        examClass: this.studentInfo.managerClasses[0].grade + this.studentInfo.managerClasses[0].school + this.studentInfo.managerClasses[0].major[0],
+                    };
+                    getPaper(paperPara).then(res => {
+                        this.allPaper = res.data;
+                    })
+                },100);
+            },
+            getStudentInfo: function () {
+                let para = {
+                    accountNumber: this.accountNumber
+                };
+                getInfo(para).then(res=>{
+                    this.studentInfo = res.data;
                 })
             },
-            initPage: function () {
-                this.getAllCatalogs();
-                this.getRoomList();
-                this.getRoomSize();
+            submitPaper: function () {
+                this.minutes = 0;
+                this.seconds = 0;
+                this.paperVisible = false;
+            },
+        },
+        watch:{
+            second:{
+                handler(newVal){
+                    this.num(newVal)
+                }
+            },
+            minute:{
+                handler(newVal){
+                    this.num(newVal)
+                }
+            }
+        },
+        computed:{
+            second:function () {
+                return this.num(this.seconds)
+            },
+            minute:function () {
+                return this.num(this.minutes)
             }
         },
         mounted(){
-            this.initPage();
+            this.getStudentInfo();
+            this.getStudentPaper();
         },
-        components:{}
     }
 </script>
 <style scoped>

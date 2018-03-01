@@ -2,6 +2,7 @@ package com.online_examing.domain;
 
 
 import com.domain.Comment;
+import com.domain.Paper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,8 +16,12 @@ public class PaperRequestDto implements Serializable {
     private String ids;
     private long accountNumber;
     private String grade;
-    private List<String> school;
+    private String school;
+    private List<String> major;
     private String password;
+    private List<String> examClass;
+    private List<String> examTime;
+    private List<Paper> examQuestion;
 
     public int getStatus() {
         return status;
@@ -82,12 +87,20 @@ public class PaperRequestDto implements Serializable {
         this.grade = grade;
     }
 
-    public List<String> getSchool() {
+    public String getSchool() {
         return school;
     }
 
-    public void setSchool(List<String> school) {
+    public void setSchool(String school) {
         this.school = school;
+    }
+
+    public List<String> getMajor() {
+        return major;
+    }
+
+    public void setMajor(List<String> major) {
+        this.major = major;
     }
 
     public String getPassword() {
@@ -96,5 +109,29 @@ public class PaperRequestDto implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<String> getExamClass() {
+        return examClass;
+    }
+
+    public void setExamClass(List<String> examClass) {
+        this.examClass = examClass;
+    }
+
+    public List<String> getExamTime() {
+        return examTime;
+    }
+
+    public void setExamTime(List<String> examTime) {
+        this.examTime = examTime;
+    }
+
+    public List<Paper> getExamQuestion() {
+        return examQuestion;
+    }
+
+    public void setExamQuestion(List<Paper> examQuestion) {
+        this.examQuestion = examQuestion;
     }
 }

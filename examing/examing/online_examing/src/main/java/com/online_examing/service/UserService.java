@@ -1,12 +1,14 @@
 package com.online_examing.service;
 
+import com.domain.ExamPaper;
 import com.domain.ManagerClass;
 import com.domain.User;
 import com.online_examing.domain.PaperRequestDto;
+import com.online_examing.repository.ExamRepository;
 import com.online_examing.repository.UserRepository;
 import com.utils.DefaultKeyGenerator;
-import com.utils.KeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +30,12 @@ public class UserService {
 
     @Autowired
     private DefaultKeyGenerator defaultKeyGenerator ;
+
+    @Autowired
+    private ExamRepository examRepository;
+
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     /**
     *@Description: 登录成功返回用户名，失败返回空
@@ -70,34 +78,36 @@ public class UserService {
            if(managerClassList.size()==0) {
                managerClassList = new ArrayList<>();
                ManagerClass updateClasses = new ManagerClass();
-               List<String> school_list = new ArrayList<>();
-               for (String s : paperRequestDto.getSchool()) {
-                   school_list.add(s);
+               List<String> major_list = new ArrayList<>();
+               for (String s : paperRequestDto.getMajor()) {
+                   major_list.add(s);
                }
                updateClasses.setGrade(paperRequestDto.getGrade());
-               updateClasses.setSchool(school_list);
+               updateClasses.setSchool(paperRequestDto.getSchool());
+               updateClasses.setMajor(major_list);
                managerClassList.add(updateClasses);
                existUser.setManagerClasses(managerClassList);
            }
            //如果有的话
            else{
-               List<String> school = new ArrayList<>();
+               List<String> major = new ArrayList<>();
                for(Iterator<ManagerClass> iter = managerClassList.iterator(); iter.hasNext();) {
                    ManagerClass m = iter.next();
-                   if( m.getGrade().equals(paperRequestDto.getGrade())){
-                        school.addAll(m.getSchool());
+                   if( m.getGrade().equals(paperRequestDto.getGrade())&&m.getSchool().equals(paperRequestDto.getSchool())){
+                        major.addAll(m.getMajor());
                         iter.remove();
                    }
                }
                ManagerClass updateClasses = new ManagerClass();
-               List<String> school_list = new ArrayList<>();
-               for (String s : paperRequestDto.getSchool()) {
-                   school_list.add(s);
+               List<String> major_list = new ArrayList<>();
+               for (String s : paperRequestDto.getMajor()) {
+                   major_list.add(s);
                }
-               school_list.addAll(school);
-               List newList = new ArrayList(new HashSet(school_list));
+               major_list.addAll(major);
+               List newList = new ArrayList(new HashSet(major_list));
                updateClasses.setGrade(paperRequestDto.getGrade());
-               updateClasses.setSchool(newList);
+               updateClasses.setSchool(paperRequestDto.getSchool());
+               updateClasses.setMajor(newList);
                managerClassList.add(updateClasses);
                existUser.setManagerClasses(managerClassList);
            }
@@ -108,5 +118,10 @@ public class UserService {
 
     public User getInfo(User user){
         return userRepository.findByAccountNumber(user.getAccountNumber());
+    }
+
+    public List<ExamPaper> getPaper(String  examClass){
+//        String examClass = user.getManagerClasses().get(0).getGrade()+user.getManagerClasses().get(0).getSchool()+user.getManagerClasses().get(0).getMajor().get(0);
+        return examRepository.findByExamClassContains(examClass);
     }
 }

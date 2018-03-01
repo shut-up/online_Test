@@ -5,10 +5,13 @@
         <el-col>
             <el-form ref="studentInfo"  :rules="studentInfoRules" :model="studentInfo"  label-width="100px" class="demo-ruleForm">
                 <el-form-item label="学号：" >
-                    <el-tag type="info">{{accountNumber}}</el-tag>
+                    <el-tag type="info">{{studentInfo.accountNumber}}</el-tag>
                 </el-form-item>
                 <el-form-item label="姓名：" >
-                    <el-tag type="info">{{name}}</el-tag>
+                    <el-tag type="info">{{studentInfo.name}}</el-tag>
+                </el-form-item>
+                <el-form-item label="班级：" >
+                    <el-tag type="info" v-for="grade1 in studentInfo.managerClasses">{{grade1.grade}}届{{grade1.school}}{{grade1.major}}</el-tag>
                 </el-form-item>
                 <el-form-item prop="newPassword" label="新密码：">
                     <el-input type="password" v-model="studentInfo.newPassword" auto-complete="off" placeholder="请输入新密码 (1-15个字符)"></el-input>
@@ -27,7 +30,7 @@
 </template>
 
 <script>
-    import {roomUpdateSelectedComment, updateInfo} from '../../api/api'
+    import {getInfo, roomUpdateSelectedComment, updateInfo} from '../../api/api'
     import Util from "../../common/js/util";
     export default {
         data(){
@@ -148,12 +151,19 @@
                 this.$refs[formName].resetFields();
                 this.studentInfo.school = '';
                 this.studentInfo.grade = '';
-            }
+            },
+            getStudentInfo: function () {
+                let para = {
+                    accountNumber: this.accountNumber
+                };
+                getInfo(para).then(res=>{
+                    this.studentInfo = res.data;
+                })
+            },
         },
         //初始化操作
         mounted(){
-            this.getCommentData();
-            this.getCommentSize();
+            this.getStudentInfo();
         },
     }
 </script>

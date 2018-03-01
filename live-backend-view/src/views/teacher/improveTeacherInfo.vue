@@ -11,7 +11,7 @@
                     <el-tag type="info">{{name}}</el-tag>
                 </el-form-item>
                 <el-form-item label="班级：">
-                    <el-tag type="info" v-for="grade1 in managerInfo.managerClasses">{{grade1.grade}}{{grade1.school}}</el-tag>
+                    <el-tag type="info" v-for="grade1 in managerInfo.managerClasses">{{grade1.grade}}届{{grade1.school}}学院{{grade1.major}}</el-tag>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -23,11 +23,13 @@
                         <el-option v-for="item in 2017-1990" :label="(item+1990)" :value="item+1990" :key="item+1990"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="学院：" prop="school">
-                    <el-select multiple clearable v-model="teacherInfo.school">
-                        <el-option label="信息学院" value="信息学院" key="信息学院"></el-option>
-                        <el-option label="物理学院" value="物理学院" key="物理学院"></el-option>
-                        <el-option label="外语学院" value="外语学院" key="外语学院"></el-option>
+                <el-form-item label="学院：">
+                    <el-select clearable v-model="teacherInfo.school" @change="getSelectMajor">
+                        <el-option v-for="item in school" :key="item.idStr" :label="item.title" :value="item.idStr"></el-option>
+                    </el-select>
+                    &nbsp&nbsp&nbsp专业：
+                    <el-select multiple clearable v-model="teacherInfo.major" :disabled="this.unable" filterable >
+                        <el-option v-for="item in majorTemp" :key="item.idStr" :label="item.title" :value="item.title" ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -45,23 +47,28 @@
     import Util from "../../common/js/util";
     export default {
         data(){
+            var g = this.GLOBAL.defaultConfig;
             return {
                 teacherInfo: {
                     accountNumber: '',
                     name: '',
                     checknewPassword: '',
                     managerClasses: [],
-                    school: [],
+                    school: '',
+                    major: [],
                     grade: '',
                 },
-                school: [],
+                school: g.school,
+                major: g.major,
+                majorTemp: [],
+                unable: true,
                 grade: '',
                 accountNumber: sessionStorage.getItem('accountNumber')==null?localStorage.getItem('accountNumber'):sessionStorage.getItem('accountNumber'),
                 name: sessionStorage.getItem('name')==null?localStorage.getItem('name'):sessionStorage.getItem('name'),
                 managerInfo: {},
                 teacherInfoRules: {
                     school: [
-                        { type:"array", required: true, message: '请选择学院', trigger: 'change' }
+                        { type:"integer", required: true, message: '请选择学院', trigger: 'change' }
                     ],
                     grade: [
                         { type:"integer",required: true, message: '请选择年级', trigger: 'change' }
@@ -92,11 +99,20 @@
                 this.$refs.teacherInfo.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                            var schoolName = "";
+                            for(var i = 0; i< this.school.length;i++){
+                                if(this.school[i].idStr===this.teacherInfo.school){
+                                    schoolName = this.school[i].title;
+                                    console.log("schoolName"+schoolName);
+                                    break;
+                                }
+                            }
                             let para = {
                                 accountNumber: this.accountNumber,
                                 grade: this.teacherInfo.grade,
-                                school: this.teacherInfo.school,
-                            }
+                                school: schoolName,
+                                major: this.teacherInfo.major,
+                            };
                             updateInfo(para).then((res) => {
                                 if (res.data !== undefined) {
                                     this.$message({
@@ -124,11 +140,17 @@
                     this.managerInfo = res.data;
                 })
             },
+            getSelectMajor: function () {
+                this.majorTemp  = this.major.filter((r) => r.parentIdStr === this.teacherInfo.school);
+                this.unable = false;
+            },
             //重置
             resetForm(formName) {
                 this.$refs[formName].resetFields();
-                this.teacherInfo.school = [];
+                this.teacherInfo.school = '';
                 this.teacherInfo.grade = '';
+                this.teacherInfo.major = [];
+
             }
         },
         //初始化操作

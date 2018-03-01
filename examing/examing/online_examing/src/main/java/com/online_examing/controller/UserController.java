@@ -64,5 +64,15 @@ public class UserController {
         return restDoing.go(null, logger);
     }
 
+    /**
+     * 获取用户的试卷
+     */
+    @GetMapping(Routes.USER_GET_PAPER)
+    public RestResult getPaper(@RequestParam(value = "examClass") String examClass){
+        RestDoing restDoing = restResult ->{
+            restResult.data = userService.getPaper(examClass);
+        };
+        return restDoing.go(null, logger);
+    }
 
 }

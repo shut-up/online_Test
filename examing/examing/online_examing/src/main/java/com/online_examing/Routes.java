@@ -20,6 +20,8 @@ public interface Routes {
     String USER_REGISTER = "/register";
     String USER_UPDATEINFO = "/updateInfo";
     String USER_GETINFO = "/getInfo";
+    String USER_GET_PAPER = "/getPaper";
+
 
     /**
      * Paper
@@ -31,4 +33,12 @@ public interface Routes {
     String PAPER_SEARCHQUESTION = "/searchQuestion";
     String PAPER_UPDATEQUESTION = "/updateQuestion";
     String PAPER_DELETEQUESTION = "/deleteQuestion";
+
+    /**
+     * Exam
+     */
+    String EXAM_BASE_ROUTE = "/exam";
+    String EXAM_CREATE_UPDATE = "/createOrUpdatePaper";
+    String EXAM_GET = "/getPaper";
+    String EXAM_GET_PAPEER_BY_ID = "/getPaperById";
 }

@@ -26,6 +26,8 @@ public class PaperDetail extends BaseEntity{
     private Integer type;//0选择题，1判断题，2填空题
     private long createTime;//创建时间
     private Integer status; //0隐藏，1显示，2删除
+    private Integer score;
+
 
     public Integer getStatus() {
         return status;
@@ -121,5 +123,13 @@ public class PaperDetail extends BaseEntity{
 
     public void setBlankAnswers(List<String> blankAnswers) {
         this.blankAnswers = blankAnswers;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }

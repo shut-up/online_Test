@@ -13,7 +13,8 @@ import java.util.List;
 @Document(collection="ManagerClass")
 public class ManagerClass  {
     private String grade;
-    private List<String> school;
+    private String school;
+    private List<String> major;
 
     public String getGrade() {
         return grade;
@@ -23,11 +24,19 @@ public class ManagerClass  {
         this.grade = grade;
     }
 
-    public List<String> getSchool() {
+    public String getSchool() {
         return school;
     }
 
-    public void setSchool(List<String> school) {
+    public void setSchool(String school) {
         this.school = school;
+    }
+
+    public List<String> getMajor() {
+        return major;
+    }
+
+    public void setMajor(List<String> major) {
+        this.major = major;
     }
 }

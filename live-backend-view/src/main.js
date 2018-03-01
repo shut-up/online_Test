@@ -24,21 +24,21 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    let user = sessionStorage.getItem('name')==null?localStorage.getItem('name'):sessionStorage.getItem('name');
-    let type = sessionStorage.getItem('type')==null?localStorage.getItem('type'):sessionStorage.getItem('type');
-    if(to.path == '/register'){
+    let user = sessionStorage.name === undefined ? localStorage.name : sessionStorage.name;
+    let type = sessionStorage.type === undefined ? localStorage.type : sessionStorage.type;
+    if(to.path === '/register'){
       next()
-    } else if (user == null && to.path != '/login') {
+    } else if (user === undefined  && to.path !== '/login') {
         alert("请登录！")
         next({ path: '/login' })
-    } else if(type == 0 && to.path == '/teacher'){
+    } else if(type === 0 && to.path === '/teacher'){
         alert("当前为学生账户，无权访问！")
         next({ path: '/myExam' })
-    } else if(type == 1 && to.path == '/student'){
+    } else if(type === 1 && to.path === '/student'){
         alert("当前为教师账户，无权访问！")
         next({ path: '/choiceQuestion' })
-    } else{
-        next();
+    } else {
+        next()
     }
 })
 

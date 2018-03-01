@@ -57,6 +57,9 @@
                 <el-form-item label="题目" prop="title">
                     <el-input v-model="addQuestionsForm.title"></el-input>
                 </el-form-item>
+                <el-form-item label="分值" prop="score">
+                    <el-input v-model="addQuestionsForm.score"></el-input>
+                </el-form-item>
                 <el-form-item label="答案" prop="blankAnswer">
                     <el-input type="textarea" :rows="3" placeholder="多个答案之间用'&'隔开" v-model="addQuestionsForm.blankAnswer">
                     </el-input>
@@ -88,6 +91,7 @@
                     title: '',
                     blankAnswer: '',
                     type: 2,
+                    score: 0,
                     status: 1,
                 },
                 //添加问题规则

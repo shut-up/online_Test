@@ -58,15 +58,15 @@
                               sessionStorage.setItem('accountNumber', res.data.accountNumber);   //将name存到sessionStorage
                               sessionStorage.setItem('type', res.data.type);   //将type存到sessionStorage
                           }
-                          this.$message({
-                              message: '登录成功',
-                              type: 'success'
-                          });
                           if(res.data.type == 0) {  //学生登录跳转到学生页面
                               this.$router.push({path: '/myExam'});
                           }else {                 //教师登录跳转到教师页面
                               this.$router.push({path: '/choiceQuestion'});
                           }
+                          this.$message({
+                              message: '登录成功',
+                              type: 'success'
+                          });
                       } else{
                           this.$message({
                               message: '用户名或密码错误',

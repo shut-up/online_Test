@@ -18,6 +18,7 @@ import trueFalseQuestion from './views/teacher/trueFalseQuestion.vue';
 import editTeacherPSW from './views/teacher/editTeacherPSW.vue';
 import improveTeacherInfo from './views/teacher/improveTeacherInfo.vue';
 import assignPaper from './views/teacher/assignPaper.vue';
+import paperManager from './views/teacher/paperManager.vue';
 
 let routes = [
     //映射登录
@@ -103,7 +104,8 @@ let routes = [
         iconCls: 'fa fa-user-o',
         isTeacher: true,
         children: [
-            { path: '/assignPaper', component: assignPaper,  name: "生成试卷"}
+            { path: '/assignPaper', component: assignPaper,  name: "生成试卷"},
+            { path: '/paperManager', component: paperManager,  name: "试卷管理"}
         ]
     },
     {
