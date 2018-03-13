@@ -52,7 +52,6 @@
                 teacherInfo: {
                     accountNumber: '',
                     name: '',
-                    checknewPassword: '',
                     managerClasses: [],
                     school: '',
                     major: [],

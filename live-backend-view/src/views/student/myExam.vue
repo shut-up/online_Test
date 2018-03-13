@@ -4,7 +4,6 @@
             <el-form ref="exam"  :model="examPaper"  label-width="100px" class="demo-ruleForm">
                 <el-form-item  >
                     <el-table :data="allPaper" highlight-current-row  @selection-change="selsChange" style="width: 100%;" ref="examRef" >
-                        <!--<el-table-column property="status" label="是否考试" width="200"></el-table-column>-->
                         <el-table-column property="title" label="试卷名称" width="200"></el-table-column>
                         <el-table-column property="beginTime" label="考试开始时间" :formatter="formatTime"></el-table-column>
                         <el-table-column property="endTime" label="考试结束时间" :formatter="formatTime"></el-table-column>
@@ -27,7 +26,8 @@
                     <span align="right" style="color: red;font-weight:bold;" >剩余时间{{minutes}}:{{seconds}}</span>
                 </div>
                 <div v-else>
-                    <span align="right" style="color: red;font-weight:bold;" >分数：{{this.score}}</span>
+                    <span align="right" style="color: red;font-weight:bold;" >分数：{{this.score}}</span><br/>
+                    <span align="right" style="color: green;font-weight:bold;" >答案：{{this.answer}}</span>
                 </div>
                 <div v-for="(question,index) in examQuestions" :key="question.title"><br>
                     {{index+1}}、<span style="font-weight:bold;">{{question.title}}</span><span style="color: red">   （{{question.score}}分）</span><br><br>
@@ -80,6 +80,7 @@
                 paperId: "",
                 ifTest: 0,
                 score: 0,
+                answer: [],
             };
         },
         methods:{
@@ -94,7 +95,7 @@
                         _this.seconds = 59;
                         _this.minutes -= 1;
                     }else if(_this.minutes == 0 && _this.seconds == 0){
-                        this.submitPaper();
+                        _this.submitPaper();
                         _this.seconds = 0;
                         window.clearInterval(time);
                     }else{
@@ -106,25 +107,29 @@
             startTest: function (index, row) {
                 var beginTime = $.extend(true, {}, row).beginTime;
                 var endTime = $.extend(true, {}, row).endTime;
-                if(new Date().getTime() < beginTime ){
-                    this.$message({
-                        message: '尚未到考试时间，请稍后重试',
-                        type: 'error'
-                    });
-                    return;
-                }
-                if(new Date().getTime() > endTime ){
-                    this.$message({
-                        message: '考试时间已结束，下次请注意',
-                        type: 'error'
-                    });
-                    return;
-                }
+//                if(new Date().getTime() < beginTime ){
+//                    this.$message({
+//                        message: '尚未到考试时间，请稍后重试',
+//                        type: 'error'
+//                    });
+//                    return;
+//                }
+//                if(new Date().getTime() > endTime ){
+//                    this.$message({
+//                        message: '考试时间已结束，下次请注意',
+//                        type: 'error'
+//                    });
+//                    return;
+//                }
                 this.paperVisible = true;
                 this.examQuestions = $.extend(true, {}, row).examQuestion;
                 this.title  = $.extend(true, {}, row).title;
                 this.paperId = $.extend(true, {}, row).idStr;
                 this.ifTest = $.extend(true, {}, row).status;
+                this.selectAnswers = [];
+                this.tfAnswers = [];
+                this.fullAnswer = [];
+                this.score = 0;
                 //毫秒数转为分钟数，并四舍五入
                 this.minutes = Math.round(( endTime - beginTime ) * 0.0000167);
                 if(this.minutes == 0)
@@ -138,7 +143,16 @@
                 this.title  = $.extend(true, {}, row).title;
                 this.paperId = $.extend(true, {}, row).idStr;
                 this.ifTest = $.extend(true, {}, row).status;
-
+                this.answer = [];
+                for(var i = 0; i < this.examQuestions.length; i++){
+                    if(this.examQuestions[i].type == 0){
+                        this.answer.push(this.examQuestions[i].choiceAnswer)
+                    }else if(this.examQuestions[i].type == 1){
+                        this.answer.push(this.examQuestions[i].tfAnswer)
+                    }else if(this.examQuestions[i].type == 2){
+                        this.answer.push(this.examQuestions[i].blankAnswer)
+                    }
+                }
                 var para = {
                     stuId: this.accountNumber,
                     paperId: this.paperId,
@@ -177,7 +191,7 @@
                         this.allPaper = res.data;
                     })
 
-                },100);
+                },200);
             },
             getStudentInfo: function () {
                 let para = {

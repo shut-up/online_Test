@@ -3,26 +3,30 @@
 
         <!--修改信息-->
         <el-col>
-            <el-form ref="studentInfo"  :rules="studentInfoRules" :model="studentInfo"  label-width="100px" class="demo-ruleForm">
+            <el-form label-width="100px" class="demo-ruleForm">
                 <el-form-item label="学号：" >
                     <el-tag type="info">{{accountNumber}}</el-tag>
                 </el-form-item>
                 <el-form-item label="姓名：" >
                     <el-tag type="info">{{name}}</el-tag>
                 </el-form-item>
-                <el-form-item label="年级：">
+            </el-form>
+        </el-col>
+        <!--修改信息-->
+        <el-col>
+            <el-form ref="studentInfo"  :rules="studentInfoRules" :model="studentInfo"  label-width="100px" class="demo-ruleForm">
+                <el-form-item label="年级：" prop="grade">
                     <el-select clearable v-model="studentInfo.grade">
                         <el-option v-for="item in 2017-1990" :label="(item+1990)" :value="item+1990" :key="item+1990"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="学院：">
-                    <el-cascader :options="option" @change="handleChange" v-model="studentInfo.school"></el-cascader>
-                </el-form-item>
-                <el-form-item label="学院：">
-                    <el-select clearable v-model="studentInfo.school">
-                        <el-option label="信息学院" value="信息学院"></el-option>
-                        <el-option label="物理学院" value="物理学院"></el-option>
-                        <el-option label="外语学院" value="外语学院"></el-option>
+                    <el-select clearable v-model="studentInfo.school" @change="getSelectMajor">
+                        <el-option v-for="item in school" :key="item.idStr" :label="item.title" :value="item.idStr"></el-option>
+                    </el-select>
+                    &nbsp&nbsp&nbsp专业：
+                    <el-select multiple clearable v-model="studentInfo.major" :disabled="this.unable" filterable >
+                        <el-option v-for="item in majorTemp" :key="item.idStr" :label="item.title" :value="item.title" ></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
@@ -45,20 +49,26 @@
                 studentInfo: {
                     accountNumber: '',
                     name: '',
-                    password: '',
-                    newPassword: '',
-                    checknewPassword: '',
-                    school: [],
+                    school: '',
+                    managerClasses: [],
+                    major: [],
                     grade: '',
                 },
-                option: g.options,
-                accountNumber: localStorage.getItem('accountNumber'),
-                name: localStorage.getItem('name'),
-                password: '',
-                newPassword: '',
-                checknewPassword: '',
-                school: '',
+                school: g.school,
+                major: g.major,
+                majorTemp: [],
+                unable: true,
                 grade: '',
+                accountNumber: sessionStorage.getItem('accountNumber')==null?localStorage.getItem('accountNumber'):sessionStorage.getItem('accountNumber'),
+                name: sessionStorage.getItem('name')==null?localStorage.getItem('name'):sessionStorage.getItem('name'),
+                studentInfoRules: {
+                    school: [
+                        { type:"integer", required: true, message: '请选择学院', trigger: 'change' }
+                    ],
+                    grade: [
+                        { type:"integer",required: true, message: '请选择年级', trigger: 'change' }
+                    ],
+                }
             };
         },
         methods: {
@@ -80,14 +90,27 @@
                 }
                 return false;
             },
+            getSelectMajor: function () {
+                this.majorTemp  = this.major.filter((r) => r.parentIdStr === this.studentInfo.school);
+                this.unable = false;
+            },
             updateInfo: function () {
                 this.$refs.studentInfo.validate((valid) => {
                     if (valid) {
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                            var schoolName = "";
+                            for(var i = 0; i< this.school.length;i++){
+                                if(this.school[i].idStr===this.studentInfo.school){
+                                    schoolName = this.school[i].title;
+                                    console.log("schoolName"+schoolName);
+                                    break;
+                                }
+                            }
                             let para = {
                                 accountNumber: this.accountNumber,
                                 grade: this.studentInfo.grade,
-                                school: this.studentInfo.school,
+                                school: schoolName,
+                                major: this.studentInfo.major,
                             };
                             updateInfo(para).then((res) => {
                                 if (res.data !== undefined) {
@@ -102,7 +125,6 @@
                                         type: 'error'
                                     });
                                 }
-                                this.$router.push({path: '/editStudentInfo'});
                             });
                         });
                     }
@@ -132,12 +154,11 @@
                 this.$refs[formName].resetFields();
                 this.studentInfo.school = '';
                 this.studentInfo.grade = '';
+                this.studentInfo.major = [];
             }
         },
         //初始化操作
         mounted(){
-            this.getCommentData();
-            this.getCommentSize();
         },
     }
 </script>
