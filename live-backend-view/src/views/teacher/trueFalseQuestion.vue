@@ -97,8 +97,8 @@
                 },
                 //答案选项
                 answerType:[
-                    {"title":"对","value":"0"},
-                    {"title":"错","value":"1"},
+                    {"title":"对","value":"T"},
+                    {"title":"错","value":"F"},
                 ],
                 //添加问题规则
                 addQuestionsRules:{

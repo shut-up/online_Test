@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @Author: walton
- * @Description: 试卷表
+ * @Description: 试卷的试题表
  * @Createtime: 2017/11/28
  */
 

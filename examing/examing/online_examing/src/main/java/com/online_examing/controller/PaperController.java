@@ -1,6 +1,6 @@
 package com.online_examing.controller;
 
-import com.domain.PaperDetail;
+import com.domain.PaperQuestion;
 import com.online_examing.Routes;
 import com.online_examing.domain.PaperRequestDto;
 import com.online_examing.repository.PaperRepository;
@@ -30,7 +30,7 @@ public class PaperController {
      * 添加、更新题目
      */
     @PostMapping(Routes.PAPER_ADDQUESTION)
-    public RestResult addQuestion(@RequestBody PaperDetail paperDetail){
+    public RestResult addQuestion(@RequestBody PaperQuestion paperDetail){
         RestDoing restDoing = restResult ->{
             restResult.data = paperService.addQuestion(paperDetail);
         };
@@ -95,11 +95,11 @@ public class PaperController {
                     paperRepository.delete(Long.valueOf(i));
                 }
             }else {
-                PaperDetail paperDetail = new PaperDetail();
+                PaperQuestion paperQuestion = new PaperQuestion();
                 for (String i : id) {
-                    paperDetail = paperRepository.findOne(Long.valueOf(i));
-                    paperDetail.setStatus(status);
-                    restResult.data = paperRepository.save(paperDetail);
+                    paperQuestion = paperRepository.findOne(Long.valueOf(i));
+                    paperQuestion.setStatus(status);
+                    restResult.data = paperRepository.save(paperQuestion);
                 }
             }
         };

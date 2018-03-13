@@ -1,6 +1,6 @@
 package com.online_examing.service;
 
-import com.domain.PaperDetail;
+import com.domain.PaperQuestion;
 import com.online_examing.domain.PaperRequestDto;
 import com.online_examing.repository.PaperRepository;
 import com.utils.DefaultKeyGenerator;
@@ -35,7 +35,7 @@ public class PaperService {
      *@Description: 插入题目
      *@Date: 2017/11/28
      */
-    public PaperDetail addQuestion(PaperDetail paperDetail){
+    public PaperQuestion addQuestion(PaperQuestion paperDetail){
         if(paperDetail.getId()==0)
             paperDetail.setId((Long) defaultKeyGenerator.generateKey());
         if(paperDetail.getCreateTime()==0) {
@@ -56,8 +56,8 @@ public class PaperService {
      *@Description: 删除题目
      *@Date: 2017/11/28
      */
-    public PaperDetail deleteQuestion(Long id){
-        PaperDetail paperDetail = paperRepository.findOne(id);
+    public PaperQuestion deleteQuestion(Long id){
+        PaperQuestion paperDetail = paperRepository.findOne(id);
         if(paperDetail!=null){
             paperRepository.delete(id);
             return paperDetail;
@@ -71,7 +71,7 @@ public class PaperService {
     *@Description: 获取当前页数的题目
     *@Date: 2017/12/4
     */
-    public List<PaperDetail> getPaperList(PaperRequestDto paperRequestDto){
+    public List<PaperQuestion> getPaperList(PaperRequestDto paperRequestDto){
         if(paperRequestDto.getType()==3){
             Sort.Order order = new Sort.Order(Sort.Direction.ASC,"type");
             Sort sort = new Sort(order);
@@ -80,7 +80,7 @@ public class PaperService {
             Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createTime");
             Sort sort = new Sort(order);
             Pageable pageable=new PageRequest(paperRequestDto.getPage()-1, paperRequestDto.getPageSize(), sort);//对数据进行分页
-            List<PaperDetail> list =  paperRepository.findByType(paperRequestDto.getType(),pageable);
+            List<PaperQuestion> list =  paperRepository.findByType(paperRequestDto.getType(),pageable);
             return list;
         }
 
@@ -91,7 +91,7 @@ public class PaperService {
     *@Description:  获取指定类型题目的总数目
     *@Date: 2017/12/4
     */
-    public  List<PaperDetail> getPaperSize(int type){
+    public  List<PaperQuestion> getPaperSize(int type){
         return paperRepository.findByType(type);
     }
 
@@ -105,7 +105,7 @@ public class PaperService {
         Sort.Order order = new Sort.Order(Sort.Direction.DESC, "createTime");
         Sort sort = new Sort(order);
         Pageable pageable = new PageRequest(paperRequestDto.getPage()-1,paperRequestDto.getPageSize(),sort);
-        List<PaperDetail> paper = paperRepository.findByTitleContainingAndType(paperRequestDto.getKeywords(),paperRequestDto.getType(),pageable);
+        List<PaperQuestion> paper = paperRepository.findByTitleContainingAndType(paperRequestDto.getKeywords(),paperRequestDto.getType(),pageable);
         int total = paperRepository.findByTitleContainingAndType(paperRequestDto.getKeywords(),paperRequestDto.getType()).size();
         Map resultMap = new HashMap();
         resultMap.put("total",total);

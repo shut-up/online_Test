@@ -1,7 +1,6 @@
 package com.online_examing.domain;
 
 
-import com.domain.Comment;
 import com.domain.Paper;
 
 import java.io.Serializable;

@@ -138,7 +138,7 @@
                 sels: [],
                 ids: [],
                 visiable: '',
-                examTime: [new Date(2018, 1, 1, 9, 0), new Date(2018, 1, 1, 11, 0)],
+                examTime: [new Date(), new Date()],
                 examTimeShow: "",
                 examId: "",
                 buttonName: "生成试卷",
@@ -187,10 +187,15 @@
                 this.selectQuestion = [];
                 this.selectQuestionVisible = false;
             },
+            compare: function(val1,val2){
+                return val1-val2;
+            },
             confirmSelectQuestions: function () {
                 this.selectQuestion = [];
+                console.log(JSON.stringify(this.sels)+"aaa");
                 this.ids = this.sels.map(item => item.idStr).toString();
                 var id = this.ids.split(",");
+                id.sort(this.compare);
                 for(var i = 0; i < id.length; i++) {
                     var s = this.questions.filter((r) => r.idStr == id[i]);
                     this.selectQuestion.push(s[0]);

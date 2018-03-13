@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * @Author: walton
- * @Description:
+ * @Description: 考试的试卷表（包括试题，考试班级等）
  * @Createtime: 2018/1/30
  */
 @Document(collection="ExamPaper")
@@ -15,7 +15,7 @@ public class ExamPaper extends BaseEntity {
     private List<String> examClass;
     private String beginTime;
     private String endTime;
-    private List<Paper> examQuestion;
+    private List<PaperQuestion> examQuestion;
     private Integer status; //0代表未考试，1代表已考完
 
     public String getTitle() {
@@ -50,11 +50,11 @@ public class ExamPaper extends BaseEntity {
         this.endTime = endTime;
     }
 
-    public List<Paper> getExamQuestion() {
+    public List<PaperQuestion> getExamQuestion() {
         return examQuestion;
     }
 
-    public void setExamQuestion(List<Paper> examQuestion) {
+    public void setExamQuestion(List<PaperQuestion> examQuestion) {
         this.examQuestion = examQuestion;
     }
 

@@ -50,4 +50,9 @@ export const getExamPaper = () => {
 export const getExamPaperById = params => {
     return axios.get(`${base}exam/getPaperById`, {params:params}).then(res=>res.data);
 };
-
+export const addPaperAnswer = params => {
+    return axios.post(`${base}exam/addPaperAnswer`, params).then(res=>res.data);
+};
+export const existPaperAnswer = params => {
+    return axios.get(`${base}exam/existPaperAnswer`, {params:params}).then(res=>res.data);
+};

@@ -8,12 +8,12 @@ import java.util.List;
 
 /**
  * @Author: walton
- * @Description: 试卷题目表
+ * @Description: 试卷的题目表
  * @Createtime: 2017/11/28
  */
 
-@Document(collection="PaperDetail")
-public class PaperDetail extends BaseEntity{
+@Document(collection="PaperQuestion")
+public class PaperQuestion extends BaseEntity{
     private String title;
     private List<String> choiceAnswer;
     private String tfAnswer;

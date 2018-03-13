@@ -16,9 +16,9 @@
                     </el-table-column>
                 </el-table>
             </el-form-item>
-            <el-form-item align="center">
-                <el-button type="primary" @click="" >生成试卷</el-button>
-            </el-form-item>
+            <!--<el-form-item align="center">-->
+                <!--<el-button type="primary" @click="" >生成试卷</el-button>-->
+            <!--</el-form-item>-->
         </el-form>
 
     </section>

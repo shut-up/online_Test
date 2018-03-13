@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * @Author: walton
- * @Description: 教师管理班级表
+ * @Description: 教师管理的班级表
  * @Createtime: 2017/11/28
  */
 

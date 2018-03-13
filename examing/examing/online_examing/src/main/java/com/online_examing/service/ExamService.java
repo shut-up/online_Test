@@ -22,6 +22,7 @@ public class ExamService {
     public ExamPaper saveExam(ExamPaper examPaper){
         if(examPaper.getId()==0)
             examPaper.setId((Long) defaultKeyGenerator.generateKey());
+        examPaper.setStatus(0);
         return examRepository.save(examPaper);
     }
 }

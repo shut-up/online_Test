@@ -5,6 +5,7 @@ import com.domain.ManagerClass;
 import com.domain.User;
 import com.online_examing.domain.PaperRequestDto;
 import com.online_examing.repository.ExamRepository;
+import com.online_examing.repository.PaperAnswerRepository;
 import com.online_examing.repository.UserRepository;
 import com.utils.DefaultKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class UserService {
 
     @Autowired
     private ExamRepository examRepository;
+
+    @Autowired
+    private PaperAnswerRepository paperAnswerRepository;
 
     @Autowired
     MongoTemplate mongoTemplate;
@@ -120,8 +124,12 @@ public class UserService {
         return userRepository.findByAccountNumber(user.getAccountNumber());
     }
 
-    public List<ExamPaper> getPaper(String  examClass){
-//        String examClass = user.getManagerClasses().get(0).getGrade()+user.getManagerClasses().get(0).getSchool()+user.getManagerClasses().get(0).getMajor().get(0);
-        return examRepository.findByExamClassContains(examClass);
+    public List<ExamPaper> getPaper(String  examClass,String stuId){
+        List<ExamPaper> examPaperList = examRepository.findByExamClassContains(examClass);
+        for(ExamPaper examPaper : examPaperList){
+            if(paperAnswerRepository.findByStuIdAndPaperId(Long.valueOf(stuId), Long.valueOf(examPaper.getIdStr()))!=null)
+                examPaper.setStatus(1);
+        }
+        return examPaperList;
     }
 }

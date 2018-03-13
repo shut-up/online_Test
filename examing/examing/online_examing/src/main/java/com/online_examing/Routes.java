@@ -41,4 +41,6 @@ public interface Routes {
     String EXAM_CREATE_UPDATE = "/createOrUpdatePaper";
     String EXAM_GET = "/getPaper";
     String EXAM_GET_PAPEER_BY_ID = "/getPaperById";
+    String EXAM_ADD_PAPER_ANSWER = "/addPaperAnswer";
+    String EXAM_EXIST_PAPER_ANSWER = "/existPaperAnswer";
 }

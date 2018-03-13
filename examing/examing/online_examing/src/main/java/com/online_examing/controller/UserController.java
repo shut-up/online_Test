@@ -68,9 +68,9 @@ public class UserController {
      * 获取用户的试卷
      */
     @GetMapping(Routes.USER_GET_PAPER)
-    public RestResult getPaper(@RequestParam(value = "examClass") String examClass){
+    public RestResult getPaper(@RequestParam(value = "examClass") String examClass,@RequestParam(value = "stuId") String stuId){
         RestDoing restDoing = restResult ->{
-            restResult.data = userService.getPaper(examClass);
+            restResult.data = userService.getPaper(examClass,stuId);
         };
         return restDoing.go(null, logger);
     }

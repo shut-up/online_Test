@@ -1,6 +1,6 @@
 package com.online_examing.repository;
 
-import com.domain.PaperDetail;
+import com.domain.PaperQuestion;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -15,16 +15,16 @@ import java.util.List;
  */
 
 @Repository
-public interface PaperRepository extends MongoRepository<PaperDetail,Long> {
+public interface PaperRepository extends MongoRepository<PaperQuestion,Long> {
 
-    public List<PaperDetail> findByTitleContainingAndType(String title, int type,Pageable pageable);
+    public List<PaperQuestion> findByTitleContainingAndType(String title, int type,Pageable pageable);
 
-    public List<PaperDetail> findByTitleContainingAndType(String title, int type);
+    public List<PaperQuestion> findByTitleContainingAndType(String title, int type);
 
-    public List<PaperDetail> findByType(int type);
+    public List<PaperQuestion> findByType(int type);
 
-    public List<PaperDetail> findByType(int type, Pageable pageable);
+    public List<PaperQuestion> findByType(int type, Pageable pageable);
 
-    public List<PaperDetail> findByType(int type, Sort sort);
+    public List<PaperQuestion> findByType(int type, Sort sort);
 
 }
